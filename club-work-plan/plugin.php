@@ -45,14 +45,14 @@ register_activation_hook(__FILE__, 'create_the_custom_table');
  * 
  */
 
+add_filter( 'theme_page_templates', 'add_page_template_to_dropdown' );
 function add_page_template_to_dropdown($templates) {
    $templates[plugin_dir_path( __FILE__ ) . 'template.php'] = __( 'Workplan', 'text-domain' );
 
    return $templates;
 }
 
-add_filter( 'theme_page_templates', 'add_page_template_to_dropdown' );
-
+add_filter( 'template_include', 'change_page_template', 99 );
 function change_page_template($template)
 {
     if (is_page()) {
@@ -66,7 +66,16 @@ function change_page_template($template)
     return $template;
 }
 
-add_filter( 'template_include', 'change_page_template', 99 );
+/**
+ * 
+ * Add custom css
+ * 
+ */
+
+add_action('wp_enqueue_scripts', 'callback_for_setting_up_scripts');
+function callback_for_setting_up_scripts() {
+	wp_enqueue_style( 'your-stylesheet-name', plugins_url('workplan.css', __FILE__), false, '1.0.0', 'all');
+}
 
 /**
  * 
@@ -87,19 +96,17 @@ function eingabeFeld( $id ) {
 		 </div>';
 }
 
-function arbeitsplan($event) {
-
+function get_workplan_for_event($event) {
 	$dutyData = getEvent($event);
-	$dutyNames = getUniqueListOfDutyNames($dutyData);
+	$dutyNames = get_unique_list_of_dutyNames($dutyData);
 
 	foreach ($dutyNames as $dutyName) {
-
-		$dutys = getDutysFromDutyName($dutyName, $dutyData);
-		dienstListe($dutyName, $dutys);
+		$dutys = get_dutys_from_dutyName($dutyName, $dutyData);
+		create_duty_list_for_dutyName($dutyName, $dutys);
 	}
 }
 
-function dienstListe($dutyName, $dutys, $beschreibung = ""){
+function create_duty_list_for_dutyName($dutyName, $dutys, $beschreibung = ""){
 	$current_user = wp_get_current_user();
 	$neueBox = true;
 
@@ -175,12 +182,12 @@ function deleteMitglied() {
 
 function getEvent($event) {
 	global $wpdb;
-	$dutyData = $wpdb->get_results("SELECT * FROM `wp_workplan` WHERE event = 'wf2023'", ARRAY_N);
+	$dutyData = $wpdb->get_results("SELECT * FROM `wp_workplan` WHERE event = '$event'", ARRAY_N);
 
 	return $dutyData;
 }
 
-function getUniqueListOfDutyNames($dutyData) {
+function get_unique_list_of_dutyNames($dutyData) {
 		$arr = array();
 		foreach ($dutyData as $duty) {
 			$arr[] = $duty[2];
@@ -190,7 +197,7 @@ function getUniqueListOfDutyNames($dutyData) {
 		return $unique_data;
 }
 
-function getDutysFromDutyName($dutyName, $dutyData) {
+function get_dutys_from_dutyName($dutyName, $dutyData) {
 	$dutys = array();
 	
 	foreach($dutyData as $duty) {

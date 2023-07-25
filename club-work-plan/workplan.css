@@ -1,0 +1,213 @@
+/*
+
+Name: Stylesheet für die Männerei Meindorf
+Author: Matthias Kaiser
+Erstellungsdatum: 18.06.2013
+
+Diese CSS Datei ist zusätzlich zu StandardTheme zu verwenden.
+Sie verändert das Layout für die Männerei.
+
+*/
+
+/* --------------- Arbeistplan --------------- */
+
+.zeitBoxLeer, .zeitBoxVoll {
+	width: 200px;
+	height: 50px;
+	border-radius: 5px;
+	margin: 15px 0 0 15px;
+	display: inline-block;
+	padding: 5px 5px 2px 5px;
+}
+
+.zeitBoxLeer {
+	background: #eeeeee;
+	background:    -moz-linear-gradient(top, #eeeeee 0%, #cccccc 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#cccccc));
+	background: -webkit-linear-gradient(top, #eeeeee 0%,#cccccc 100%);
+	background:      -o-linear-gradient(top, #eeeeee 0%,#cccccc 100%);
+	background:     -ms-linear-gradient(top, #eeeeee 0%,#cccccc 100%);
+	background: 		linear-gradient(to bottom, #eeeeee 0%,#cccccc 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 );
+	-webkit-box-shadow: 0px 0px 8px -2px rgba(0,0,0,0.5);
+	   -moz-box-shadow: 0px 0px 8px -2px rgba(0,0,0,0.5);
+			box-shadow: 0px 0px 8px -2px rgba(0,0,0,0.5);
+	border: 1px solid #dbdbdb;
+}
+
+.zeitBoxVoll {
+	background: #a9db80; /* Old browsers */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#a9db80), color-stop(100%,#96c56f)); /* Chrome,Safari4+ */
+	background:    -moz-linear-gradient(top,  #a9db80 0%, #96c56f 100%); /* FF3.6+ */
+	background: -webkit-linear-gradient(top,  #a9db80 0%,#96c56f 100%); /* Chrome10+,Safari5.1+ */
+	background:      -o-linear-gradient(top,  #a9db80 0%,#96c56f 100%); /* Opera 11.10+ */
+	background:     -ms-linear-gradient(top,  #a9db80 0%,#96c56f 100%); /* IE10+ */
+	background:			linear-gradient(to bottom,  #a9db80 0%,#96c56f 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a9db80', endColorstr='#96c56f',GradientType=0 ); /* IE6-9 */
+	-webkit-box-shadow: 0px 0px 8px -2px rgba(157,211,113,1);
+	   -moz-box-shadow: 0px 0px 8px -2px rgba(157,211,113,1);
+			box-shadow: 0px 0px 8px -2px rgba(157,211,113,1);
+	border: 1px solid #9dd371;
+}
+
+.dienstBar {
+	margin: 20px auto 20px auto;
+	width: 100%;
+	float: left;
+	font-family: "Open Sans", Helvetica, Arial, sans-serif;
+	font-size: 12pt;
+	border-bottom: 1px solid #dbdbdb;
+}
+
+.mitgliedsName {
+	margin: 25px auto 0 auto;
+ 	text-align: center;
+ 	font-weight: bold;
+	text-shadow: 0.5px 0.5px #ffffff;
+}
+
+.artDesDienstes {
+	float: left;
+	font-weight: bold;
+	width: 50%;
+	text-align: left;
+}
+
+.zeitDesDienstes {
+	float: right;
+}
+
+.arbeitsPlanInput {
+	margin-left: -30px;
+}
+
+.zeitBoxNachZeit {
+	width: 100%;
+	height: 100%;
+	max-width: 690px;
+	margin: 25px auto 0 auto;
+	text-align: center;
+}
+
+.checkmark {
+	width: 10%;
+	float: right;
+	margin-top: -25px;
+}
+
+.dankeUndZurueck {
+	text-align: center;
+	font-size: 16pt;
+	margin-top: 20px;
+}
+
+.daemmerSchoppen {
+	font-family: Verdana;
+	padding-top: 30px;
+	font-size: 20px;
+	font-weight: bold;
+	text-shadow: 1px 1px 1px gray;
+}
+
+.deleteButtonAdmin {
+	background-color: red;
+	width: 15px;
+	height: 15px;
+	float: right;
+	margin: -5px 2px 0 0;
+	border-radius: 5px;
+	color: white;
+	font-weight: bold;
+}
+
+.eingabeFeld {
+	margin-top: 18px;
+}
+
+.formMitglied {
+	width: 160px;
+}
+
+
+/* ------------- Arbeistplan Neu ------------- */
+
+.dayBox {
+	width: 50%;
+	margin-top: 20px;
+	float: left;
+}
+
+.dayBoxTitle {
+	width: 100%;
+	height: 30px;
+}
+
+.dutyBox {
+	width: 75%;
+	height: 160px;
+	background: #eeeeee;
+	background:    -moz-linear-gradient(top, #eeeeee 0%, #cccccc 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#cccccc));
+	background: -webkit-linear-gradient(top, #eeeeee 0%,#cccccc 100%);
+	background:      -o-linear-gradient(top, #eeeeee 0%,#cccccc 100%);
+	background:     -ms-linear-gradient(top, #eeeeee 0%,#cccccc 100%);
+	background: 		linear-gradient(to bottom, #eeeeee 0%,#cccccc 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 );
+	margin: 0 auto 20px auto;
+}
+
+.dutyBoxTitle {
+	width: 100%;
+	height: 20px;
+	font-size: 12pt;
+	padding: 10px 0 10px 10px;
+}
+
+.dutyBoxInfo {
+	width: 25%;
+	height: 40px;
+	float: left;
+	margin-top: 17px;
+	margin-left: 20px
+}
+
+.dutyBoxMember {
+	width: 50px;
+	height: 33px;
+	border-radius: 30px;
+	background-image: url("http://mann.schmaeddes.de/wp-content/themes/frohsinn/images/frittenfrank.png");
+	background-size: 50px;
+	float: left;
+	margin-left: 1.9%;
+	text-align: center;
+	vertical-align: middle;
+	padding-top: 17px;
+	color:white;
+	font-size:12pt;
+	text-shadow: 1px 1px #000000;
+}
+
+.dutyBoxMemberInfo {
+	width: 100px;
+	height: 100px;
+	background-color: blue;
+	display:none;
+	position:absolute;
+}
+
+.dutyBoxMemberInfoBlock {
+	display: block;
+}
+
+.dutyBoxShift {
+	width: 100%;
+	height: 60px;
+}
+
+.dutyBoxHover {
+	box-shadow: 0px 0px 8px -2px rgba(0,0,0,0.5);
+}
+
+.dayBoxHighlighted {
+	background-color: red;
+}
