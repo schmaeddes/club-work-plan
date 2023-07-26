@@ -1,4 +1,5 @@
 <?php 
+
 class Duty {
 
     public $id;
@@ -19,4 +20,5 @@ class Duty {
         $this->dateOfEntry = $array[6];
     }
 }
+
 ?>

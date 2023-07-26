@@ -1,11 +1,14 @@
 <?php
+
 /*
 Template Name: workplan
 */
+    $cwpEventId = get_post_custom_values('cwp_event_id')[0];
 
-    get_header(); 
+    get_header();
 
-    get_workplan_for_event("wf2023"); 
+    get_workplan_for_event($cwpEventId);
 
-    get_footer(); 
+    get_footer();
+    
 ?>

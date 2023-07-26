@@ -1,4 +1,5 @@
 <?php
+
 /**
 * Plugin Name: Club Work Plan
 * Plugin URI: https://github.com/schmaeddes/club-work-plan
@@ -8,83 +9,9 @@
 * Author URI: https://www.schmaeddes.de/
 **/
 
-/**
- * 
- * Create custom table at activation of plugin
- * 
- */
-
+include 'setup.php';
 include 'Duty.php';
-
-function create_the_custom_table() {
-    global $wpdb;
-    $charset_collate = $wpdb->get_charset_collate();
-	
-    $table_name = $wpdb->prefix . 'workplan';
-
-    $sql = "CREATE TABLE " . $table_name . " (
-	id int(11) NOT NULL AUTO_INCREMENT,
-	event VARCHAR(100) NOT NULL,
-	duty VARCHAR(100) NOT NULL,
-	startTime time NULL,
-	endTime time NULL,
-    member VARCHAR(100) NULL,
-    dateOfEntry time NULL,
-	PRIMARY KEY (id)
-    ) $charset_collate;";
- 
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-    dbDelta($sql);
-}
-
-register_activation_hook(__FILE__, 'create_the_custom_table');
-
-/**
- * 
- * Add template to dropdown
- * 
- */
-
-add_filter( 'theme_page_templates', 'add_page_template_to_dropdown' );
-function add_page_template_to_dropdown($templates) {
-   $templates[plugin_dir_path( __FILE__ ) . 'template.php'] = __( 'Workplan', 'text-domain' );
-
-   return $templates;
-}
-
-add_filter( 'template_include', 'change_page_template', 99 );
-function change_page_template($template)
-{
-    if (is_page()) {
-        $meta = get_post_meta(get_the_ID());
-
-        if (!empty($meta['_wp_page_template'][0]) && $meta['_wp_page_template'][0] != $template) {
-            $template = $meta['_wp_page_template'][0];
-        }
-    }
-
-    return $template;
-}
-
-/**
- * 
- * Add custom css
- * 
- */
-
-add_action('wp_enqueue_scripts', 'callback_for_setting_up_scripts');
-function callback_for_setting_up_scripts() {
-	wp_enqueue_style( 'your-stylesheet-name', plugins_url('workplan.css', __FILE__), false, '1.0.0', 'all');
-}
-
-/**
- * 
- * Functions auf work-plan
- * 
- */
-
-// --------------------------------------------------------------------
-//	Arbeitsplan
+include 'adminMenu.php';
 
 function eingabeFeld( $id ) {
 	echo'<div class="eingabeFeld">
@@ -96,8 +23,10 @@ function eingabeFeld( $id ) {
 		 </div>';
 }
 
-function get_workplan_for_event($event) {
-	$dutyData = getEvent($event);
+function get_workplan_for_event($eventID) {
+	$eventData = getEventData($eventID);
+	$dutyData = getDutys($eventID);
+
 	$dutyNames = get_unique_list_of_dutyNames($dutyData);
 
 	foreach ($dutyNames as $dutyName) {
@@ -161,7 +90,7 @@ function submitMitglied() {
 	global $wpdb;
 	$mitglied = $_GET["mitglied"];
 	$id = $_GET["id"];
-	$abfrageMitglied = $wpdb->get_results("SELECT `mitglied` FROM `wp_workplan` WHERE `id` = '$id'", ARRAY_N);
+	$abfrageMitglied = $wpdb->get_results("SELECT `mitglied` FROM `wp_workplan_dutys` WHERE `id` = '$id'", ARRAY_N);
 	//$prüfungMitglied = mysql_fetch_row($abfrageMitglied);
 	print_r($abfrageMitglied[0][0]);
 	if ( $abfrageMitglied[0][0] == "" ) {
@@ -176,13 +105,20 @@ function deleteMitglied() {
 	global $wpdb;
 	$mitglied = $_GET["mitglied"];
 	$id = $_GET["id"];
-	$wpdb->update('wp_workplan', array( 'mitglied' => NULL ), array( 'id' => $id));
+	$wpdb->update('wp_workplan_dutys', array( 'mitglied' => NULL ), array( 'id' => $id));
 	echo '<div class="dankeUndZurueck">'. $mitglied .' wurde erfolgreich gelöscht!<br><a href="http://maennerei-meindorf.de/daemmerschoppen-arbeitsplan/">Hier gehts zurück!</a></div>';
 }
 
-function getEvent($event) {
+function getEventData($eventID) {
 	global $wpdb;
-	$dutyData = $wpdb->get_results("SELECT * FROM `wp_workplan` WHERE event = '$event'", ARRAY_N);
+	$eventData = $wpdb->get_results("SELECT * FROM `wp_cwp_events` WHERE id = '$eventID'", ARRAY_N);
+
+	return $eventData;
+}
+
+function getDutys($eventID) {
+	global $wpdb;
+	$dutyData = $wpdb->get_results("SELECT * FROM `wp_cwp_dutys` WHERE event_id = '$eventID'", ARRAY_N);
 
 	return $dutyData;
 }
@@ -208,3 +144,5 @@ function get_dutys_from_dutyName($dutyName, $dutyData) {
 
 	return $dutys;
 }
+
+?>

@@ -83,7 +83,6 @@ Sie verändert das Layout für die Männerei.
 
 .zeitBoxNachZeit {
 	width: 100%;
-	height: 100%;
 	max-width: 690px;
 	margin: 25px auto 0 auto;
 	text-align: center;
@@ -126,88 +125,4 @@ Sie verändert das Layout für die Männerei.
 
 .formMitglied {
 	width: 160px;
-}
-
-
-/* ------------- Arbeistplan Neu ------------- */
-
-.dayBox {
-	width: 50%;
-	margin-top: 20px;
-	float: left;
-}
-
-.dayBoxTitle {
-	width: 100%;
-	height: 30px;
-}
-
-.dutyBox {
-	width: 75%;
-	height: 160px;
-	background: #eeeeee;
-	background:    -moz-linear-gradient(top, #eeeeee 0%, #cccccc 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#cccccc));
-	background: -webkit-linear-gradient(top, #eeeeee 0%,#cccccc 100%);
-	background:      -o-linear-gradient(top, #eeeeee 0%,#cccccc 100%);
-	background:     -ms-linear-gradient(top, #eeeeee 0%,#cccccc 100%);
-	background: 		linear-gradient(to bottom, #eeeeee 0%,#cccccc 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 );
-	margin: 0 auto 20px auto;
-}
-
-.dutyBoxTitle {
-	width: 100%;
-	height: 20px;
-	font-size: 12pt;
-	padding: 10px 0 10px 10px;
-}
-
-.dutyBoxInfo {
-	width: 25%;
-	height: 40px;
-	float: left;
-	margin-top: 17px;
-	margin-left: 20px
-}
-
-.dutyBoxMember {
-	width: 50px;
-	height: 33px;
-	border-radius: 30px;
-	background-image: url("http://mann.schmaeddes.de/wp-content/themes/frohsinn/images/frittenfrank.png");
-	background-size: 50px;
-	float: left;
-	margin-left: 1.9%;
-	text-align: center;
-	vertical-align: middle;
-	padding-top: 17px;
-	color:white;
-	font-size:12pt;
-	text-shadow: 1px 1px #000000;
-}
-
-.dutyBoxMemberInfo {
-	width: 100px;
-	height: 100px;
-	background-color: blue;
-	display:none;
-	position:absolute;
-}
-
-.dutyBoxMemberInfoBlock {
-	display: block;
-}
-
-.dutyBoxShift {
-	width: 100%;
-	height: 60px;
-}
-
-.dutyBoxHover {
-	box-shadow: 0px 0px 8px -2px rgba(0,0,0,0.5);
-}
-
-.dayBoxHighlighted {
-	background-color: red;
 }
