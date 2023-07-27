@@ -15,7 +15,7 @@ function create_workplan_event_table() {
 	event_name VARCHAR(100) NOT NULL,
 	description VARCHAR(500) NULL,
 	date_of_event datetime NOT NULL,
-    date_of_creation timestamp,
+    date_of_creation timestamp DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (id)
     ) $charset_collate;";
  

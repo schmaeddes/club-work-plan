@@ -14,10 +14,12 @@ class EventsTable extends WP_List_Table {
 
         $columns = $this->get_columns();
         $hidden = array();
-        $sortable = array();
+        $sortable = $this->get_sortable_columns();
         $primary  = 'event_name';
         $this->_column_headers = array($columns, $hidden, $sortable, $primary);
         
+        usort($this->table_data, array(&$this, 'usort_reorder'));
+
         $this->items = $this->table_data;
     }
 
@@ -51,14 +53,41 @@ class EventsTable extends WP_List_Table {
         );
     }
 
+    protected function get_sortable_columns() {
+        $sortable_columns = array(
+            'id'            => array('id', true),
+            'event_name'    => array('event_name', true),
+            'date_of_event' => array('date_of_event', true)
+        );
+
+        return $sortable_columns;
+    }
+
+    // Sorting function
+    function usort_reorder($a, $b) {
+        // If no sort, default to user_login
+        $orderby = (!empty($_GET['orderby'])) ? $_GET['orderby'] : 'id';
+
+        // If no order, default to asc
+        $order = (!empty($_GET['id'])) ? $_GET['id'] : 'asc';
+
+        // Determine sort order
+        $result = strcmp($a[$orderby], $b[$orderby]);
+
+        // Send final sort direction to usort
+        return ($order === 'asc') ? $result : -$result;
+    }
+
     // Define table columns
     function get_columns() {
         $columns = array(
             'cb'            => '<input type="checkbox" />',
+            'id'            => __('ID', 'supporthost-cookie-consent'),
             'event_name'    => __('Event Name', 'supporthost-cookie-consent'),
             'description'   => __('Description', 'supporthost-cookie-consent'),
             'date_of_event' => __('Date of event', 'supporthost-cookie-consent')
         );
+
         return $columns;
     }
 }
