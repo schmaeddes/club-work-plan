@@ -117,7 +117,7 @@ function create_duty_list_for_dutyName($dutyName, $dutys, $beschreibung = ""){
 			}
 			echo '<div class="mitgliedsName">'. $splittedName .'</div>';
 			if (user_can( $current_user, 'administrator' )) {
-				echo '<a href="http://mann.schmaeddes.de/deletemitglied?id='. $dutyDto->id .'&mitglied='. $dutyDto->member .'"><div class="deleteButtonAdmin">X</div></a>';
+				//echo '<a href="http://mann.schmaeddes.de/deletemitglied?id='. $dutyDto->id .'&mitglied='. $dutyDto->member .'"><div class="deleteButtonAdmin">X</div></a>';
 			}
 		} else {
 			eingabeFeld( $dutyDto->id );
@@ -135,12 +135,8 @@ function submitMitglied() {
 	$abfrageMitglied = $wpdb->get_results("SELECT `mitglied` FROM `wp_workplan_dutys` WHERE `id` = '$id'", ARRAY_N);
 	//$prüfungMitglied = mysql_fetch_row($abfrageMitglied);
 	print_r($abfrageMitglied[0][0]);
-	if ( $abfrageMitglied[0][0] == "" ) {
-		$wpdb->update('wp_arbeitsplan', array( 'mitglied' => $mitglied ), array( 'id' => $id ));
-		echo '<div class="dankeUndZurueck">Danke, dass du dich eingetragen hast '. $mitglied .'!<br><a href="http://maennerei-meindorf.de/daemmerschoppen-arbeitsplan/">Hier gehts zurück!</a></div>';
-	} else {
-		echo '<div class="dankeUndZurueck">Fehler.>>>' . $abfrageMitglied[0].mitglied . '<<< Hier ist schon ein Mitglied eingetragen.<br><a href="http://maennerei-meindorf.de/daemmerschoppen-arbeitsplan/">Hier gehts zurück!</a></div>';
-	}
+
+	// ToDo
 }
 
 function deleteMitglied() {
@@ -148,7 +144,8 @@ function deleteMitglied() {
 	$mitglied = $_GET["mitglied"];
 	$id = $_GET["id"];
 	$wpdb->update('wp_workplan_dutys', array( 'mitglied' => NULL ), array( 'id' => $id));
-	echo '<div class="dankeUndZurueck">'. $mitglied .' wurde erfolgreich gelöscht!<br><a href="http://maennerei-meindorf.de/daemmerschoppen-arbeitsplan/">Hier gehts zurück!</a></div>';
+
+	// ToDo
 }
 
 function getEventData($eventID) {

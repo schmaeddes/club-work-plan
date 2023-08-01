@@ -12,8 +12,7 @@ function add_page_template_to_dropdown($templates) {
 }
 
 add_filter( 'template_include', 'change_page_template', 99 );
-function change_page_template($template)
-{
+function change_page_template($template) {
     if (is_page()) {
         $meta = get_post_meta(get_the_ID());
 

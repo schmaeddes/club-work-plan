@@ -1,10 +1,12 @@
 <?php
 
 include 'EventsTable.php';
+include 'DutysTable.php';
 
 add_action('admin_menu', 'add_workplan_setup_menu');
 function add_workplan_setup_menu() {
     add_menu_page('Club Workplan', 'Club Workplan', 'manage_options', 'club-workplan', 'club_workplan');
+    add_submenu_page('club-workplan', 'CWP Submenu', 'CWP Submenu', 'manage_options', 'cwp-event-edit', 'cwp_event_edit');
 }
 
 add_action('admin_post_create-event', 'submit_create_event');
@@ -20,14 +22,12 @@ function submit_create_event() {
 }
 
 function club_workplan() {
-    // Creating an instance
-    $table = new EventsTable();
+    echo '<h1>Events</h1>';
 
-    echo '<div class="wrap"><h1>Events</h1>';
-    // Prepare table
+    $table = new EventsTable();
     $table->prepare_items();
-    // Display table
     $table->display();
+
     echo '</div>';
     echo "<h1>Create new event</h1>";
     ?>
@@ -56,5 +56,26 @@ function club_workplan() {
     </div>
 
 <?php 
-    }
+}
+
+function cwp_event_edit() {
+    echo'<h1>Edit Event</h1>';
+
+    echo'Tach!';
+
+
+    echo'<h1>Dutys</h1>';
+
+    $table = new DutysTable();
+
+    // Prepare table
+    $table->prepare_items($_GET['eventID']);
+    // Display table
+    $table->display();
+
+    echo'<h1>Add dutys</h1>';
+
+
+}
+
 ?>
