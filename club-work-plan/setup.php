@@ -1,54 +1,6 @@
 <?php
 
 /**
- * Create custom table at activation of plugin 
- */
-
-function create_workplan_event_table() {
-    global $wpdb;
-    $charset_collate = $wpdb->get_charset_collate();
-	
-    $table_name = $wpdb->prefix . 'cwp_events';
-
-    $sql = "CREATE TABLE " . $table_name . " (
-	id int(11) NOT NULL AUTO_INCREMENT,
-	event_name VARCHAR(100) NOT NULL,
-	description VARCHAR(500) NULL,
-	date_of_event datetime NOT NULL,
-    date_of_creation timestamp DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY (id)
-    ) $charset_collate;";
- 
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-    dbDelta($sql);
-}
-
-register_activation_hook(__FILE__, 'create_workplan_event_table');
-
-function create_workplan_duty_table() {
-    global $wpdb;
-    $charset_collate = $wpdb->get_charset_collate();
-	
-    $table_name = $wpdb->prefix . 'cwp_dutys';
-
-    $sql = "CREATE TABLE " . $table_name . " (
-	id int(11) NOT NULL AUTO_INCREMENT,
-	event_id int(11) NOT NULL,
-	duty VARCHAR(100) NOT NULL,
-	start_time TIME NULL,
-	end_time TIME NULL,
-    member VARCHAR(100) NULL,
-    date_of_entry TIMESTAMP NULL,
-	PRIMARY KEY (id)
-    ) $charset_collate;";
- 
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-    dbDelta($sql);
-}
-
-register_activation_hook(__FILE__, 'create_workplan_duty_table');
-
-/**
  * Add template to dropdown
  */
 

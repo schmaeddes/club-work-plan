@@ -13,7 +13,7 @@ function submit_create_event() {
     $newEventName=$_POST['new_event_name'];
     $newEventDescription=$_POST['new_event_description'];
     $newEventDate=$_POST['new_event_date'];
-    $data=array('event_name'=>$newEventName,'description'=>$newEventDescription,'date_of_event'=>$newEventDate);
+    $data=array('event_name'=>$newEventName, 'event_description'=>$newEventDescription, 'date_of_event'=>$newEventDate);
     $wpdb->insert( $wpdb->prefix . 'cwp_events', $data);   
     
     wp_safe_redirect( esc_url( site_url('/wp-admin/admin.php?page=club-workplan') ) );

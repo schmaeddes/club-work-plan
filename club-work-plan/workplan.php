@@ -9,8 +9,46 @@
 * Author URI: https://www.schmaeddes.de/
 **/
 
+/**
+ * Create custom table at activation of plugin 
+ */
+
+register_activation_hook(__FILE__, 'create_workplan_tables');
+function create_workplan_tables() {
+	global $wpdb;
+	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+	$charset_collate = $wpdb->get_charset_collate();
+	$table_name = $wpdb->prefix . 'cwp_events';
+
+	$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+		id mediumint(9) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+		event_name VARCHAR(100) NOT NULL,
+		event_description VARCHAR(500) NULL,
+		date_of_event DATETIME NOT NULL,
+		date_of_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+	) $charset_collate;";
+
+	dbDelta($sql);
+
+	$table_name = $wpdb->prefix . 'cwp_dutys';
+
+	$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+		id mediumint(9) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+		event_id mediumint(9) NOT NULL,
+		duty VARCHAR(100) NOT NULL,
+		start_time TIME NULL,
+		end_time TIME NULL,
+		member VARCHAR(100) NULL,
+		date_of_entry TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+	) $charset_collate;";
+
+	dbDelta($sql);
+}
+
 include 'setup.php';
 include 'Duty.php';
+include 'Event.php';
 include 'adminMenu.php';
 
 function eingabeFeld( $id ) {
@@ -24,8 +62,12 @@ function eingabeFeld( $id ) {
 }
 
 function get_workplan_for_event($eventID) {
-	$eventData = getEventData($eventID);
+	$eventDto = getEventData($eventID);
 	$dutyData = getDutys($eventID);
+
+	echo'<h1>' . $eventDto->name . '</h1>';
+	echo'<h1>' . $eventDto->description . '</h1>';
+	echo'<h1>' . $eventDto->date . '</h1>';
 
 	$dutyNames = get_unique_list_of_dutyNames($dutyData);
 
@@ -113,7 +155,7 @@ function getEventData($eventID) {
 	global $wpdb;
 	$eventData = $wpdb->get_results("SELECT * FROM `wp_cwp_events` WHERE id = '$eventID'", ARRAY_N);
 
-	return $eventData;
+	return new Event($eventData[0]);
 }
 
 function getDutys($eventID) {

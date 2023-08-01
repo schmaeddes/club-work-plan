@@ -3,7 +3,7 @@
 class Duty {
 
     public $id;
-    public $event;
+    public $eventID;
     public $duty;
     public $startTime;
     public $endtime;
@@ -12,7 +12,7 @@ class Duty {
 
     function __construct($array) {
         $this->id = $array[0];
-        $this->event = $array[1];
+        $this->eventID = $array[1];
         $this->duty = $array[2];
         $this->startTime = $array[3];
         $this->endtime = $array[4];
