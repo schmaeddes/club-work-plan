@@ -93,7 +93,7 @@ class EventsTable extends WP_List_Table {
         // Replace 'column3_data_key' with the actual key representing the data you want to link to
         // $link = get_edit_post_link($item['event_name_data_key']); // Example: use get_edit_post_link() function
         
-        $link = (site_url('/wp-admin/admin.php?page=cwp-event-edit&eventID=' . $item['id']));
+        $link = (site_url('/wp-admin/admin.php?page=club-workplan&eventID=' . $item['id']));
         $element = $item['event_name'];
 
         return sprintf('<a href="%s">%s</a>', $link, $element);

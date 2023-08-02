@@ -6,7 +6,6 @@ include 'DutysTable.php';
 add_action('admin_menu', 'add_workplan_setup_menu');
 function add_workplan_setup_menu() {
     add_menu_page('Club Workplan', 'Club Workplan', 'manage_options', 'club-workplan', 'club_workplan');
-    add_submenu_page('club-workplan', 'CWP Submenu', 'CWP Submenu', 'manage_options', 'cwp-event-edit', 'cwp_event_edit');
 }
 
 add_action('admin_post_create-event', 'submit_create_event');
@@ -22,6 +21,14 @@ function submit_create_event() {
 }
 
 function club_workplan() {
+    if (isset($_GET['eventID'])) {
+        cwp_event_edit();
+    } else {
+        cwp_create_event();
+    }
+}
+
+function cwp_create_event() {
     echo '<h1>Events</h1>';
 
     $table = new EventsTable();
@@ -74,8 +81,6 @@ function cwp_event_edit() {
     $table->display();
 
     echo'<h1>Add dutys</h1>';
-
-
 }
 
 ?>
