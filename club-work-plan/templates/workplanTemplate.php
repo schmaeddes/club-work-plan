@@ -1,7 +1,7 @@
 <?php
 
 /*
-Template Name: workplan
+Template Name: Club Workplan
 */
     $cwpEventId = get_post_custom_values('cwp_event_id')[0];
 

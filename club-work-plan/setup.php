@@ -6,7 +6,7 @@
 
 add_filter( 'theme_page_templates', 'add_page_template_to_dropdown' );
 function add_page_template_to_dropdown($templates) {
-   $templates[plugin_dir_path( __FILE__ ) . 'template.php'] = __( 'Workplan', 'text-domain' );
+   $templates[plugin_dir_path( __FILE__ ) . 'templates/workplanTemplate.php'] = __( 'Club Workplan', 'text-domain' );
 
    return $templates;
 }
@@ -30,7 +30,7 @@ function change_page_template($template) {
 
 add_action('wp_enqueue_scripts', 'callback_for_setting_up_scripts');
 function callback_for_setting_up_scripts() {
-	wp_enqueue_style( 'your-stylesheet-name', plugins_url('workplan.css', __FILE__), false, '1.0.0', 'all');
+	wp_enqueue_style( 'your-stylesheet-name', plugins_url('css/workplan.css', __FILE__), false, '1.0.0', 'all');
 }
 
 ?>

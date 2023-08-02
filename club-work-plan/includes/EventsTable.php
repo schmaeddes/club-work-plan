@@ -5,10 +5,8 @@ if (!class_exists('WP_List_Table')) {
 }
 
 class EventsTable extends WP_List_Table {
-
     private $table_data;
 
-    // Here we will add our code
     function prepare_items() {
         $this->table_data = $this->get_table_data();
 
@@ -23,7 +21,6 @@ class EventsTable extends WP_List_Table {
         $this->items = $this->table_data;
     }
 
-    // Get table data
     private function get_table_data() {
         global $wpdb;
 
@@ -63,7 +60,6 @@ class EventsTable extends WP_List_Table {
         return $sortable_columns;
     }
 
-    // Sorting function
     function usort_reorder($a, $b) {
         // If no sort, default to user_login
         $orderby = (!empty($_GET['orderby'])) ? $_GET['orderby'] : 'id';
@@ -78,7 +74,6 @@ class EventsTable extends WP_List_Table {
         return ($order === 'asc') ? $result : -$result;
     }
 
-    // Define table columns
     function get_columns() {
         return array(
             'cb'                => '<input type="checkbox" />',
@@ -90,9 +85,6 @@ class EventsTable extends WP_List_Table {
     }
 
     function column_event_name($item) {
-        // Replace 'column3_data_key' with the actual key representing the data you want to link to
-        // $link = get_edit_post_link($item['event_name_data_key']); // Example: use get_edit_post_link() function
-        
         $link = (site_url('/wp-admin/admin.php?page=club-workplan&eventID=' . $item['id']));
         $element = $item['event_name'];
 

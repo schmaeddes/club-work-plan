@@ -1,7 +1,7 @@
 <?php
 
-include 'EventsTable.php';
-include 'DutysTable.php';
+include( plugin_dir_path( __DIR__ ) . 'includes/EventsTable.php');
+include( plugin_dir_path( __DIR__ ) . 'includes/DutysTable.php');
 
 add_action('admin_menu', 'add_workplan_setup_menu');
 function add_workplan_setup_menu() {

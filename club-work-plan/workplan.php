@@ -47,9 +47,9 @@ function create_workplan_tables() {
 }
 
 include 'setup.php';
-include 'Duty.php';
-include 'Event.php';
-include 'adminMenu.php';
+include 'includes/Duty.php';
+include 'includes/Event.php';
+include 'admin/adminMenu.php';
 
 
 function eingabeFeld( $id ) {
@@ -83,10 +83,10 @@ function create_duty_list_for_dutyName($dutyName, $dutys, $beschreibung = ""){
 	$neueBox = true;
 
 	echo '<br><div class="dienstBar">'. $dutyName . " " . $beschreibung .'</div><br>';
+	$alteStartZeit = "";
 
 	foreach ($dutys as $duty) {
 		$dutyDto = new Duty($duty);
-		$alteStartZeit = "";
 		
 		if ($neueBox == true){
 			echo '<div class="zeitBoxNachZeit">';

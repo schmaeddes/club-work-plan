@@ -1,4 +1,3 @@
-
 <?php 
 
 if (!class_exists('WP_List_Table')) {
@@ -6,10 +5,8 @@ if (!class_exists('WP_List_Table')) {
 }
 
 class DutysTable extends WP_List_Table {
-
     private $table_data;
 
-    // Here we will add our code
     function prepare_items($eventID = '') {
         $this->table_data = $this->get_table_data($eventID);
 
@@ -21,7 +18,6 @@ class DutysTable extends WP_List_Table {
         
         usort($this->table_data, array(&$this, 'usort_reorder'));
 
-        /* pagination */
         $per_page = 10;
         $current_page = $this->get_pagenum();
         $total_items = count($this->table_data);
@@ -37,7 +33,6 @@ class DutysTable extends WP_List_Table {
         $this->items = $this->table_data;
     }
 
-    // Get table data
     private function get_table_data($eventID = '') {
         global $wpdb;
 
@@ -82,22 +77,14 @@ class DutysTable extends WP_List_Table {
         return $sortable_columns;
     }
 
-    // Sorting function
     function usort_reorder($a, $b) {
-        // If no sort, default to user_login
         $orderby = (!empty($_GET['orderby'])) ? $_GET['orderby'] : 'id';
-
-        // If no order, default to asc
         $order = (!empty($_GET['id'])) ? $_GET['id'] : 'asc';
-
-        // Determine sort order
         $result = strcmp($a[$orderby], $b[$orderby]);
 
-        // Send final sort direction to usort
         return ($order === 'asc') ? $result : -$result;
     }
 
-    // Define table columns
     function get_columns() {
         return array(
             'cb'                => '<input type="checkbox" />',
@@ -109,16 +96,6 @@ class DutysTable extends WP_List_Table {
             'member'     => __('Member', 'supporthost-cookie-consent')
         );
     }
-
-    // function column_event_name($item) {
-    //     // Replace 'column3_data_key' with the actual key representing the data you want to link to
-    //     // $link = get_edit_post_link($item['event_name_data_key']); // Example: use get_edit_post_link() function
-        
-    //     $link = (site_url('/wp-admin/admin.php?page=cwp-event-edit&eventID=' . $item['id']));
-    //     $element = $item['event_name'];
-
-    //     return sprintf('<a href="%s">%s</a>', $link, $element);
-    // }
 }
 
 ?>
