@@ -86,6 +86,7 @@ function create_duty_list_for_dutyName($dutyName, $dutys, $beschreibung = ""){
 
 	foreach ($dutys as $duty) {
 		$dutyDto = new Duty($duty);
+		$alteStartZeit = "";
 		
 		if ($neueBox == true){
 			echo '<div class="zeitBoxNachZeit">';

@@ -39,9 +39,6 @@ function submit_create_duty() {
     wp_redirect( esc_url_raw( site_url("/wp-admin/admin.php?page=club-workplan&eventID=" . $newDutyEventID . "&paged=" . $totalPagesOfTable) ) );
 }
 
-include 'workplanUtils.php';
-
-
 function club_workplan() {
     if (isset($_GET['eventID'])) {
         cwp_event_edit();
