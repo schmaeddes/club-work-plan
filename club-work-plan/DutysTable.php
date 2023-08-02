@@ -21,6 +21,19 @@ class DutysTable extends WP_List_Table {
         
         usort($this->table_data, array(&$this, 'usort_reorder'));
 
+        /* pagination */
+        $per_page = 10;
+        $current_page = $this->get_pagenum();
+        $total_items = count($this->table_data);
+
+        $this->table_data = array_slice($this->table_data, (($current_page - 1) * $per_page), $per_page);
+
+        $this->set_pagination_args(array(
+                'total_items' => $total_items, // total number of items
+                'per_page'    => $per_page, // items to show on a page
+                'total_pages' => ceil( $total_items / $per_page ) // use ceil to round up
+        ));
+
         $this->items = $this->table_data;
     }
 

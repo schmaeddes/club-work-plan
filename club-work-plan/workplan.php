@@ -51,6 +51,7 @@ include 'Duty.php';
 include 'Event.php';
 include 'adminMenu.php';
 
+
 function eingabeFeld( $id ) {
 	echo'<div class="eingabeFeld">
 			<form class="arbeitsPlanInput" action="http://mann.schmaeddes.de/submitmitglied" method="get">
