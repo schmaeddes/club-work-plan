@@ -4,6 +4,8 @@
 
 - [x] Edit Event
 - [ ] Save Name correct in db via frontend
+- [ ] Deletable duties
+- [ ] Deletable events (with linked duties)
 
 ## 🐞 Bugs
 

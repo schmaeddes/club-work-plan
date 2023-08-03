@@ -72,17 +72,16 @@ function cwp_create_event() {
     echo '.wp-list-table .column-date_of_event { width: 15%; }';
     echo '</style>';
 
-    echo '<h1>Events</h1>';
-
-    $table = new EventsTable();
-    $table->prepare_items();
-    $table->display();
-
+    echo '<div class="wrap">';
+        echo '<h1>Events</h1>';
+        $table = new EventsTable();
+        $table->prepare_items();
+        $table->display();
     echo '</div>';
-    echo "<h1>Create new event</h1>";
-    ?>
 
+?>
     <div class="wrap">
+        <h1>Create new event</h1>
         <form method="post" action="<?php echo admin_url("admin-post.php"); ?>">
             <input type="hidden" name="action" value="create-event" />    
 
@@ -112,6 +111,7 @@ function cwp_event_edit() {
 
     $eventID = $_GET['eventID'];
     $eventData = getEventData($eventID);
+    $totalPagesOfTable = $table->_pagination_args['total_pages'];
     
     // TODO: style auslagern?
 
@@ -121,10 +121,9 @@ function cwp_event_edit() {
     echo '.wp-list-table .column-duty, column-member { width: 25%; }';
     echo '</style>';
 
-    echo'<h1>Edit Event</h1>';
-
 ?>
     <div class="wrap">
+        <h1>Edit Event</h1>
         <form method="post" action="<?php echo admin_url("admin-post.php"); ?>">
             <input type="hidden" name="action" value="update-event" />    
             <input type="hidden" name="event_id" value="<?php echo $eventData->id; ?>" />
@@ -149,18 +148,19 @@ function cwp_event_edit() {
     </div>
 
 <?php
-    echo'<h1>Dutys of ' . $eventData->name . '</h1>';
 
-    $table = new DutysTable();
-    $table->prepare_items($eventID);
-    $table->display();
+    echo '<div class="wrap">';
+        echo'<h1>Dutys of ' . $eventData->name . '</h1>';
+        $table = new DutysTable();
+        $table->prepare_items($eventID);
+        $table->display();
+    echo '</div>';
 
-    $totalPagesOfTable = $table->_pagination_args['total_pages'];
+    echo '';
 
-    echo '<h1>Add dutys to ' . $eventData->name . '</h1>';
-
-    ?>
+?>
     <div class="wrap">
+        <h1>Add dutys to <?php echo $eventData->name; ?></h1>
         <form method="post" action="<?php echo admin_url("admin-post.php"); ?>">
             <input type="hidden" name="action" value="create-duty" />    
             <input type="hidden" name="new_duty_event_id" value="<?php echo $eventID; ?>" />
@@ -191,5 +191,4 @@ function cwp_event_edit() {
     
 <?php
 }
-
 ?>
