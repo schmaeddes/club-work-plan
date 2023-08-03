@@ -20,6 +20,22 @@ function submit_create_event() {
     wp_safe_redirect( esc_url( site_url('/wp-admin/admin.php?page=club-workplan') ) );
 }
 
+add_action('admin_post_update-event', 'submit_update_event');
+function submit_update_event() {
+    global $wpdb;
+    $eventID = $_POST['event_id'];
+
+    $newEventName = $_POST['edit_event_name'];
+    $newEventDescription = $_POST['edit_event_description'];
+    $newEventDate = $_POST['edit_event_date'];
+    $data =array('event_name' => $newEventName, 'event_description' => $newEventDescription, 'date_of_event' => $newEventDate);
+    $wpdb->update( $wpdb->prefix . 'cwp_events', $data, array('ID' => $eventID));   
+    
+    // update( 'table', array( 'column' => 'foo', 'field' => 'bar' ), array( 'ID' => 1 ) )
+
+    wp_redirect( esc_url_raw( site_url("/wp-admin/admin.php?page=club-workplan&eventID=" . $eventID)));
+}
+
 add_action('admin_post_create-duty', 'submit_create_duty');
 function submit_create_duty() {
     global $wpdb;
@@ -36,7 +52,7 @@ function submit_create_duty() {
         $wpdb->insert( $wpdb->prefix . 'cwp_dutys', $data);
     }
     
-    wp_redirect( esc_url_raw( site_url("/wp-admin/admin.php?page=club-workplan&eventID=" . $newDutyEventID . "&paged=" . $totalPagesOfTable) ) );
+    wp_redirect( esc_url_raw( site_url("/wp-admin/admin.php?page=club-workplan&eventID=" . $newDutyEventID . "&paged=" . $totalPagesOfTable)));
 }
 
 function club_workplan() {
@@ -76,11 +92,11 @@ function cwp_create_event() {
                     <td><input name="new_event_name" type="text" /></td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="blogdescription">Description</label></th>
-                    <td><input name="new_event_description" type="text" /></td>
+                    <th scope="row"><label>Description</label></th>
+                    <td><input name="new_event_description" size="40" type="text" /></td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="blogdescription">Date of event</label></th>
+                    <th scope="row"><label>Date of event</label></th>
                     <td><input name="new_event_date" type="text" /></td>
                 </tr>        
             </table>
@@ -97,6 +113,8 @@ function cwp_event_edit() {
     $eventID = $_GET['eventID'];
     $eventData = getEventData($eventID);
     
+    // TODO: style auslagern?
+
     echo '<style type="text/css">';
     echo '.wp-list-table .column-id { width: 5%; }';
     echo '.wp-list-table .column-event_id, .column-start_time, .column-end_time { width: 15%; }';
@@ -105,19 +123,39 @@ function cwp_event_edit() {
 
     echo'<h1>Edit Event</h1>';
 
-    echo'Tach!';
+?>
+    <div class="wrap">
+        <form method="post" action="<?php echo admin_url("admin-post.php"); ?>">
+            <input type="hidden" name="action" value="update-event" />    
+            <input type="hidden" name="event_id" value="<?php echo $eventData->id; ?>" />
 
+            <table class="form-table" role="presentation">
+                <tr>
+                    <th scope="row"><label>Event Name</label></th>
+                    <td><input name="edit_event_name" type="text" value="<?php echo $eventData->name; ?>"/></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label>Description</label></th>
+                    <td><input name="edit_event_description" type="text" size="40" value="<?php echo $eventData->description; ?>"/></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label>Date of event</label></th>
+                    <td><input name="edit_event_date" type="text" value="<?php echo $eventData->date; ?>"/></td>
+                </tr>        
+            </table>
+
+            <?php submit_button( __( 'Update event' ), 'primary', 'update-event', true ); ?>
+        </form>
+    </div>
+
+<?php
     echo'<h1>Dutys of ' . $eventData->name . '</h1>';
 
     $table = new DutysTable();
-
-    // Prepare table
     $table->prepare_items($eventID);
-    // Display table
     $table->display();
 
     $totalPagesOfTable = $table->_pagination_args['total_pages'];
-
 
     echo '<h1>Add dutys to ' . $eventData->name . '</h1>';
 
