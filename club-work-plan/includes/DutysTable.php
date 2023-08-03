@@ -8,6 +8,13 @@ class DutysTable extends WP_List_Table {
     private $table_data;
 
     function prepare_items($eventID = '') {
+
+        if (isset($_GET['action']) && $_GET['page'] == "club-workplan" && $_GET['action'] == "delete") {
+            global $wpdb;
+            $dutyID = $_GET['duty'];        
+            $wpdb->delete('wp_cwp_dutys', array( 'ID' => $dutyID));
+        }
+
         $this->table_data = $this->get_table_data($eventID);
 
         $columns = $this->get_columns();
@@ -87,14 +94,25 @@ class DutysTable extends WP_List_Table {
 
     function get_columns() {
         return array(
-            'cb'                => '<input type="checkbox" />',
-            'id'                => __('ID', 'supporthost-cookie-consent'),
-            'event_id'        => __('Event ID', 'supporthost-cookie-consent'),
-            'duty' => __('Duty', 'supporthost-cookie-consent'),
-            'start_time'     => __('Start Time', 'supporthost-cookie-consent'),
-            'end_time'     => __('End Time', 'supporthost-cookie-consent'),
-            'member'     => __('Member', 'supporthost-cookie-consent')
+            'cb'            => '<input type="checkbox" />',
+            'id'            => __('ID', 'supporthost-cookie-consent'),
+            'event_id'      => __('Event ID', 'supporthost-cookie-consent'),
+            'duty'          => __('Duty', 'supporthost-cookie-consent'),
+            'start_time'    => __('Start Time', 'supporthost-cookie-consent'),
+            'end_time'      => __('End Time', 'supporthost-cookie-consent'),
+            'member'        => __('Member', 'supporthost-cookie-consent')
         );
+    }
+
+    /**
+     * Row actions
+     */
+    function column_duty($item) {
+        $actions = array(
+            'delete'    => sprintf('<a href="?page=%s&eventID=%s&action=%s&duty=%s">' . __('Delete', 'wp_cwp_dutys') . '</a>', 'club-workplan', $item['event_id'], 'delete', $item['id']),
+        );
+
+        return sprintf('<strong>%1$s</strong> %2$s', $item['duty'], $this->row_actions($actions));
     }
 }
 
