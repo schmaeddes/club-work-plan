@@ -109,7 +109,8 @@ class DutysTable extends WP_List_Table {
      */
     function column_duty($item) {
         $actions = array(
-            'delete'    => sprintf('<a href="?page=%s&eventID=%s&action=%s&duty=%s">' . __('Delete', 'wp_cwp_dutys') . '</a>', 'club-workplan', $item['event_id'], 'delete', $item['id']),
+            'edit'      => sprintf('<a href="?page=%s&eventID=%s&action=%s&duty=%s">' . __('Edit', 'wp_cwp_dutys') . '</a>', 'club-workplan', $item['event_id'], 'edit_duty', $item['id']),
+            'delete'    => sprintf('<a href="?page=%s&eventID=%s&action=%s&duty=%s">' . __('Delete', 'wp_cwp_dutys') . '</a>', 'club-workplan', $item['event_id'], 'delete_duty', $item['id']),
         );
 
         return sprintf('<strong>%1$s</strong> %2$s', $item['duty'], $this->row_actions($actions));

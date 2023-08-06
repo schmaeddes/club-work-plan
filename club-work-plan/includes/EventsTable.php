@@ -77,17 +77,22 @@ class EventsTable extends WP_List_Table {
     function get_columns() {
         return array(
             'cb'                => '<input type="checkbox" />',
-            'id'                => __('ID', 'supporthost-cookie-consent'),
-            'event_name'        => __('Event Name', 'supporthost-cookie-consent'),
-            'event_description' => __('Description', 'supporthost-cookie-consent'),
-            'date_of_event'     => __('Date of event', 'supporthost-cookie-consent')
+            'id'                => __('ID', 'cwp_events'),
+            'event_name'        => __('Event Name', 'cwp_events'),
+            'event_description' => __('Description', 'cwp_events'),
+            'date_of_event'     => __('Date of event', 'cwp_events')
         );
     }
 
     function column_event_name($item) {
         $link = (site_url('/wp-admin/admin.php?page=club-workplan&eventID=' . $item['id']));
-        $element = $item['event_name'];
+        $eventName = $item['event_name'];
+        $eventID = $item['id'];
 
-        return sprintf('<a href="%s">%s</a>', $link, $element);
+        $actions = array(
+            'edit'    => sprintf('<a href="?page=%s&eventID=%s&action=%s">' . __('Edit', 'wp_cwp_dutys') . '</a>', 'club-workplan', $eventID, 'edit_event'),
+        );
+
+        return sprintf('<strong><a href="%s">%s</a></strong> %s', $link, $eventName, $this->row_actions($actions));
     }
 }

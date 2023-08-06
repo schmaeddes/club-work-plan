@@ -1,7 +1,9 @@
 <?php
 
 include(plugin_dir_path(__DIR__) . 'admin/eventsMenu.php');
-include(plugin_dir_path(__DIR__) . 'admin/editEventMenu.php');
+include(plugin_dir_path(__DIR__) . 'admin/dutiesMenu.php');
+include(plugin_dir_path(__DIR__) . 'admin/editEvent.php');
+include(plugin_dir_path(__DIR__) . 'admin/editDuty.php');
 
 include(plugin_dir_path(__DIR__) . 'includes/EventsTable.php');
 include(plugin_dir_path(__DIR__) . 'includes/DutysTable.php');
@@ -23,48 +25,13 @@ function submit_create_event() {
     wp_safe_redirect(esc_url(site_url('/wp-admin/admin.php?page=club-workplan')));
 }
 
-add_action('admin_post_update-event', 'submit_update_event');
-function submit_update_event() {
-    global $wpdb;
-    $eventID = $_POST['event_id'];
-
-    $newEventName = $_POST['edit_event_name'];
-    $newEventDescription = $_POST['edit_event_description'];
-    $newEventDate = $_POST['edit_event_date'];
-    $data = array('event_name' => $newEventName, 'event_description' => $newEventDescription, 'date_of_event' => $newEventDate);
-    $wpdb->update($wpdb->prefix . 'cwp_events', $data, array('ID' => $eventID));
-
-    wp_redirect(esc_url_raw(site_url("/wp-admin/admin.php?page=club-workplan&eventID=" . $eventID)));
-}
-
-add_action('admin_post_create-duty', 'submit_create_duty');
-function submit_create_duty() {
-    global $wpdb;
-    $totalPagesOfTable = $_POST['total_pages'];
-    $numberOfDutys = (int)$_POST['number_of_dutys'];
-
-    $newDutyEventID = $_POST['new_duty_event_id'];
-    $newDutyName = $_POST['new_duty_name'];
-    $newStartTime = $_POST['new_start_time'];
-    $newEndTime = $_POST['new_end_time'];
-
-    for ($i = 1; $i <= $numberOfDutys; $i++) {
-        $data = array(
-            'event_id' => $newDutyEventID,
-            'duty' => $newDutyName,
-            'start_time' => $newStartTime,
-            'end_time' => $newEndTime
-        );
-        $wpdb->insert($wpdb->prefix . 'cwp_dutys', $data);
-    }
-
-    $redirectUrl = sprintf("/wp-admin/admin.php?page=%s&eventID=%s&paged=%s", "club-workplan", $newDutyEventID, $totalPagesOfTable);
-    wp_redirect(esc_url_raw(site_url($redirectUrl)));
-}
-
 function club_workplan() {
-    if (isset($_GET['eventID'])) {
+    if (isset($_GET['action']) && isset($_GET['eventID']) && $_GET['action'] == "edit_event") {
         cwp_event_edit();
+    } else if (isset($_GET['action']) && isset($_GET['duty']) && $_GET['action'] == "edit_duty") {
+        cwp_duty_edit();
+    } else if (isset($_GET['eventID'])) {
+        cwp_duties_view();
     } else {
         cwp_create_event();
     }

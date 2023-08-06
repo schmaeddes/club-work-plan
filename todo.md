@@ -7,12 +7,14 @@
 
 ### Admin Page
 - [x] Edit Event
-- [ ] Edit Duty
+- [x] Edit Duty
 - [x] Deletable duties with row action
 - [ ] Deletable duties with bulk action
 - [ ] Deletable events via row action (with linked duties)
 - [ ] Deletable events via bulk action (with linked duties)
 - [ ] Deletable events (with linked duties)
+- [ ] Show Dates formatted from settings
+      get_option('date_format'), strtotime($dutyData->endTime);
 
 ## 🐞 Bugs
 

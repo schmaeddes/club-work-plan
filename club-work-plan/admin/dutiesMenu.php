@@ -1,42 +1,41 @@
 <?php
 
-function cwp_event_edit() {
+add_action('admin_post_create-duty', 'submit_create_duty');
+function submit_create_duty() {
+    global $wpdb;
+    $totalPagesOfTable = $_POST['total_pages'];
+    $numberOfDutys = (int)$_POST['number_of_dutys'];
+
+    $newDutyEventID = $_POST['new_duty_event_id'];
+    $newDutyName = $_POST['new_duty_name'];
+    $newStartTime = $_POST['new_start_time'];
+    $newEndTime = $_POST['new_end_time'];
+
+    for ($i = 1; $i <= $numberOfDutys; $i++) {
+        $data = array(
+            'event_id' => $newDutyEventID,
+            'duty' => $newDutyName,
+            'start_time' => $newStartTime,
+            'end_time' => $newEndTime
+        );
+        $wpdb->insert($wpdb->prefix . 'cwp_dutys', $data);
+    }
+
+    $redirectUrl = sprintf("/wp-admin/admin.php?page=%s&eventID=%s&paged=%s", "club-workplan", $newDutyEventID, $totalPagesOfTable);
+    wp_redirect(esc_url_raw(site_url($redirectUrl)));
+}
+
+function cwp_duties_view() {
 
     get_edit_event_table_style();
 
     $eventID = $_GET['eventID'];
     $eventData = getEventData($eventID);
-?>
 
-    <div class="wrap">
-        <h1>Edit Event</h1>
-        <form method="post" action="<?php echo admin_url("admin-post.php"); ?>">
-            <input type="hidden" name="action" value="update-event" />
-            <input type="hidden" name="event_id" value="<?php echo $eventData->id; ?>" />
-
-            <table class="form-table" role="presentation">
-                <tr>
-                    <th scope="row"><label>Event Name</label></th>
-                    <td><input name="edit_event_name" type="text" value="<?php echo $eventData->name; ?>" /></td>
-                </tr>
-                <tr>
-                    <th scope="row"><label>Description</label></th>
-                    <td><input name="edit_event_description" type="text" size="40" value="<?php echo $eventData->description; ?>" /></td>
-                </tr>
-                <tr>
-                    <th scope="row"><label>Date of event</label></th>
-                    <td><input name="edit_event_date" type="text" value="<?php echo $eventData->date; ?>" /></td>
-                </tr>
-            </table>
-
-            <?php submit_button(__('Update event'), 'primary', 'update-event', true); ?>
-        </form>
-    </div>
-
-    <?php
+    echo get_event_title($eventData);
 
     echo '<div class="wrap">';
-    echo '<h1>Dutys of ' . $eventData->name . '</h1>';
+    echo '<h1>Dutys</h1>';
     $table = new DutysTable();
     $table->prepare_items($eventID);
     $table->display();
@@ -45,9 +44,9 @@ function cwp_event_edit() {
 
     echo '';
 
-    ?>
+?>
     <div class="wrap">
-        <h1>Add dutys to <?php echo $eventData->name; ?></h1>
+        <h1>Add dutys</h1>
         <form method="post" action="<?php echo admin_url("admin-post.php"); ?>">
             <input type="hidden" name="action" value="create-duty" />
             <input type="hidden" name="new_duty_event_id" value="<?php echo $eventID; ?>" />
@@ -68,7 +67,7 @@ function cwp_event_edit() {
                 </tr>
                 <tr>
                     <th scope="row"><label>How many?</label></th>
-                    <td><input name="number_of_dutys" type="number" /></td>
+                    <td><input name="number_of_dutys" type="number" value="1" /></td>
                 </tr>
             </table>
 
@@ -86,4 +85,8 @@ function get_edit_event_table_style() {
     echo '.wp-list-table .column-event_id, .column-start_time, .column-end_time { width: 15%; }';
     echo '.wp-list-table .column-duty, column-member { width: 25%; }';
     echo '</style>';
+}
+
+function get_event_title($eventData) {
+    return sprintf('<h1>%s (%s)</h1>%s', $eventData->name, $eventData->date, $eventData->description);
 }

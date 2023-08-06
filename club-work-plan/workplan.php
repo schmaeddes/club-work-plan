@@ -164,6 +164,13 @@ function getDutys($eventID) {
 	return $dutyData;
 }
 
+function getDuty($dutyID) {
+	global $wpdb;
+	$dutyData = $wpdb->get_results("SELECT * FROM `wp_cwp_dutys` WHERE id = '$dutyID'", ARRAY_N);
+
+	return new Duty($dutyData[0]);
+}
+
 function get_unique_list_of_dutyNames($dutyData) {
 		$arr = array();
 		foreach ($dutyData as $duty) {
