@@ -32,5 +32,3 @@ add_action('wp_enqueue_scripts', 'callback_for_setting_up_scripts');
 function callback_for_setting_up_scripts() {
 	wp_enqueue_style( 'your-stylesheet-name', plugins_url('css/workplan.css', __FILE__), false, '1.0.0', 'all');
 }
-
-?>

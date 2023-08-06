@@ -185,5 +185,3 @@ function get_dutys_from_dutyName($dutyName, $dutyData) {
 
 	return $dutys;
 }
-
-?>

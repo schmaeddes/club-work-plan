@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 if (!class_exists('WP_List_Table')) {
     require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
@@ -15,7 +15,7 @@ class EventsTable extends WP_List_Table {
         $sortable = $this->get_sortable_columns();
         $primary  = 'event_name';
         $this->_column_headers = array($columns, $hidden, $sortable, $primary);
-        
+
         usort($this->table_data, array(&$this, 'usort_reorder'));
 
         $this->items = $this->table_data;
@@ -33,20 +33,20 @@ class EventsTable extends WP_List_Table {
     }
 
     function column_default($item, $column_name) {
-          switch ($column_name) {
-                case 'id':
-                case 'event_name':
-                case 'event_description':
-                case 'date_of_event':
-                default:
-                    return $item[$column_name];
-          }
+        switch ($column_name) {
+            case 'id':
+            case 'event_name':
+            case 'event_description':
+            case 'date_of_event':
+            default:
+                return $item[$column_name];
+        }
     }
 
     function column_cb($item) {
         return sprintf(
-                '<input type="checkbox" name="element[]" value="%s" />',
-                $item['id']
+            '<input type="checkbox" name="element[]" value="%s" />',
+            $item['id']
         );
     }
 
@@ -91,5 +91,3 @@ class EventsTable extends WP_List_Table {
         return sprintf('<a href="%s">%s</a>', $link, $element);
     }
 }
-
-?>

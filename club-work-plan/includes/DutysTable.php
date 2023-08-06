@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 if (!class_exists('WP_List_Table')) {
     require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
@@ -11,8 +11,8 @@ class DutysTable extends WP_List_Table {
 
         if (isset($_GET['action']) && $_GET['page'] == "club-workplan" && $_GET['action'] == "delete") {
             global $wpdb;
-            $dutyID = $_GET['duty'];        
-            $wpdb->delete('wp_cwp_dutys', array( 'ID' => $dutyID));
+            $dutyID = $_GET['duty'];
+            $wpdb->delete('wp_cwp_dutys', array('ID' => $dutyID));
         }
 
         $this->table_data = $this->get_table_data($eventID);
@@ -22,7 +22,7 @@ class DutysTable extends WP_List_Table {
         $sortable = $this->get_sortable_columns();
         $primary  = 'id';
         $this->_column_headers = array($columns, $hidden, $sortable, $primary);
-        
+
         usort($this->table_data, array(&$this, 'usort_reorder'));
 
         $per_page = 10;
@@ -32,9 +32,9 @@ class DutysTable extends WP_List_Table {
         $this->table_data = array_slice($this->table_data, (($current_page - 1) * $per_page), $per_page);
 
         $this->set_pagination_args(array(
-                'total_items' => $total_items, // total number of items
-                'per_page'    => $per_page, // items to show on a page
-                'total_pages' => ceil( $total_items / $per_page ) // use ceil to round up
+            'total_items' => $total_items, // total number of items
+            'per_page'    => $per_page, // items to show on a page
+            'total_pages' => ceil($total_items / $per_page) // use ceil to round up
         ));
 
         $this->items = $this->table_data;
@@ -52,22 +52,22 @@ class DutysTable extends WP_List_Table {
     }
 
     function column_default($item, $column_name) {
-          switch ($column_name) {
-                case 'id':
-                case 'event_id':
-                case 'duty':
-                case 'start_time':
-                case 'end_time':
-                case 'member':
-                default:
-                    return $item[$column_name];
-          }
+        switch ($column_name) {
+            case 'id':
+            case 'event_id':
+            case 'duty':
+            case 'start_time':
+            case 'end_time':
+            case 'member':
+            default:
+                return $item[$column_name];
+        }
     }
 
     function column_cb($item) {
         return sprintf(
-                '<input type="checkbox" name="element[]" value="%s" />',
-                $item['id']
+            '<input type="checkbox" name="element[]" value="%s" />',
+            $item['id']
         );
     }
 
@@ -115,5 +115,3 @@ class DutysTable extends WP_List_Table {
         return sprintf('<strong>%1$s</strong> %2$s', $item['duty'], $this->row_actions($actions));
     }
 }
-
-?>

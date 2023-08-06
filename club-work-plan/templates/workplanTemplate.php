@@ -10,5 +10,3 @@ Template Name: Club Workplan
     get_workplan_for_event($cwpEventId);
 
     get_footer();
-    
-?>

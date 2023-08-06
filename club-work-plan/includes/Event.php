@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class Event {
 
@@ -7,7 +7,7 @@ class Event {
     public $description;
     public $date;
     public $creationDate;
-    
+
     function __construct($array) {
         $this->id = $array[0];
         $this->name = $array[1];
@@ -16,5 +16,3 @@ class Event {
         $this->creationDate = $array[4];
     }
 }
-
-?>
