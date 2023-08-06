@@ -6,8 +6,6 @@ function cwp_event_edit() {
 
     $eventID = $_GET['eventID'];
     $eventData = getEventData($eventID);
-    $totalPagesOfTable = $table->_pagination_args['total_pages'];
-
 ?>
 
     <div class="wrap">
@@ -42,6 +40,7 @@ function cwp_event_edit() {
     $table = new DutysTable();
     $table->prepare_items($eventID);
     $table->display();
+    $totalPagesOfTable = $table->_pagination_args['total_pages'];
     echo '</div>';
 
     echo '';
