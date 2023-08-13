@@ -8,18 +8,18 @@ class Event {
     public $date;
     public $creationDate;
 
-    function __construct($array) {
+    function __construct($row) {
         $dateFormat = get_option('date_format');
         $timeFormat = get_option('time_format');
         $formattedDate = sprintf("%s %s",
-            date($dateFormat, strtotime($array[3])),
-            date($timeFormat, strtotime($array[3]))
+            date($dateFormat, strtotime($row->date_of_event)),
+            date($timeFormat, strtotime($row->date_of_event))
         );
 
-        $this->id = $array[0];
-        $this->name = $array[1];
-        $this->description = $array[2];
+        $this->id = $row->id;
+        $this->name = $row->event_name;
+        $this->description = $row->event_description;
         $this->date = $formattedDate;
-        $this->creationDate = $array[4];
+        $this->creationDate = $row->date_of_creation;
     }
 }

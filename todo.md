@@ -3,7 +3,7 @@
 ## 📚 Features
 
 ### Frontend
-- [ ] Save Name correct in db via frontend
+- [x] Save Name correct in db via frontend
 
 ### Admin Page
 - [x] Edit Event
