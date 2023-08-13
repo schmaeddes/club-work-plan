@@ -9,7 +9,7 @@ function submit_update_event() {
     $newEventDescription = $_POST['edit_event_description'];
     $newEventDate = $_POST['edit_event_date'];
     $data = array('event_name' => $newEventName, 'event_description' => $newEventDescription, 'date_of_event' => $newEventDate);
-    $wpdb->update($wpdb->prefix . 'cwp_events', $data, array('ID' => $eventID));
+    $wpdb->update(CWP_EVENT_TABLE, $data, array('ID' => $eventID));
 
     //wp_redirect(esc_url_raw(site_url("/wp-admin/admin.php?page=club-workplan&eventID=" . $eventID . "&action=edit")));
     wp_safe_redirect(esc_url(site_url('/wp-admin/admin.php?page=club-workplan')));
@@ -17,9 +17,9 @@ function submit_update_event() {
 
 function cwp_event_edit() {
     $eventID = $_GET['eventID'];
-    $eventData = getEventData($eventID);
+    $eventData = get_event_data($eventID);
 
-?>
+    ?>
 
     <div class="wrap">
         <h1>Edit Event</h1>
@@ -45,9 +45,6 @@ function cwp_event_edit() {
             <?php submit_button(__('Update event'), 'primary', 'update-event', true); ?>
         </form>
     </div>
-
-<?php
-
+    <?php
 }
-
 ?>

@@ -1,17 +1,17 @@
 <?php
 
-function cwp_create_event() {
+require_once(CWP_PLUGIN_PATH . 'admin/classes/Events_Table.php');
 
+function cwp_create_event() {
     get_event_table_stlye();
 
     echo '<div class="wrap">';
     echo '<h1>Events</h1>';
-    $table = new EventsTable();
+    $table = new Events_Table();
     $table->prepare_items();
     $table->display();
     echo '</div>';
-
-?>
+    ?>
     <div class="wrap">
         <h1>Create new event</h1>
         <form method="post" action="<?php echo admin_url("admin-post.php"); ?>">
@@ -36,8 +36,7 @@ function cwp_create_event() {
         </form>
     </div>
 
-<?php
-
+    <?php
 }
 
 function get_event_table_stlye() {
@@ -48,5 +47,4 @@ function get_event_table_stlye() {
     echo '.wp-list-table .column-date_of_event { width: 15%; }';
     echo '</style>';
 }
-
 ?>

@@ -4,7 +4,7 @@ if (!class_exists('WP_List_Table')) {
     require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
 }
 
-class DutysTable extends WP_List_Table {
+class Duties_Table extends WP_List_Table {
     private $table_data;
 
     function prepare_items($eventID = '') {
@@ -12,7 +12,7 @@ class DutysTable extends WP_List_Table {
         if (isset($_GET['action']) && $_GET['page'] == "club-workplan" && $_GET['action'] == "delete") {
             global $wpdb;
             $dutyID = $_GET['duty'];
-            $wpdb->delete('wp_cwp_dutys', array('ID' => $dutyID));
+            $wpdb->delete(CWP_DUTY_TABLE, array('ID' => $dutyID));
         }
 
         $this->table_data = $this->get_table_data($eventID);
@@ -43,7 +43,7 @@ class DutysTable extends WP_List_Table {
     private function get_table_data($eventID = '') {
         global $wpdb;
 
-        $table = $wpdb->prefix . 'cwp_dutys';
+        $table = CWP_DUTY_TABLE;
 
         return $wpdb->get_results(
             "SELECT * from {$table} WHERE event_id='{$eventID}'",
@@ -109,8 +109,8 @@ class DutysTable extends WP_List_Table {
      */
     function column_duty($item) {
         $actions = array(
-            'edit'      => sprintf('<a href="?page=%s&eventID=%s&action=%s&duty=%s">' . __('Edit', 'wp_cwp_dutys') . '</a>', 'club-workplan', $item['event_id'], 'edit_duty', $item['id']),
-            'delete'    => sprintf('<a href="?page=%s&eventID=%s&action=%s&duty=%s">' . __('Delete', 'wp_cwp_dutys') . '</a>', 'club-workplan', $item['event_id'], 'delete_duty', $item['id']),
+            'edit'      => sprintf('<a href="?page=%s&eventID=%s&action=%s&duty=%s">' . __('Edit', CWP_DUTY_TABLE) . '</a>', 'club-workplan', $item['event_id'], 'edit_duty', $item['id']),
+            'delete'    => sprintf('<a href="?page=%s&eventID=%s&action=%s&duty=%s">' . __('Delete', CWP_DUTY_TABLE) . '</a>', 'club-workplan', $item['event_id'], 'delete_duty', $item['id']),
         );
 
         return sprintf('<strong>%1$s</strong> %2$s', $item['duty'], $this->row_actions($actions));

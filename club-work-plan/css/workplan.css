@@ -18,6 +18,7 @@ Sie verändert das Layout für die Männerei.
 	margin: 15px 0 0 15px;
 	display: inline-block;
 	padding: 5px 5px 2px 5px;
+	font-size: 12px;
 }
 
 .zeitBoxLeer {
@@ -86,12 +87,6 @@ Sie verändert das Layout für die Männerei.
 	max-width: 690px;
 	margin: 25px auto 0 auto;
 	text-align: center;
-}
-
-.checkmark {
-	width: 10%;
-	float: right;
-	margin-top: -25px;
 }
 
 .dankeUndZurueck {

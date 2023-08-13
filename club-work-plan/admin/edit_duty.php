@@ -11,7 +11,7 @@ function submit_update_duty() {
     $newEndTime = $_POST['edit_end_time'];
     $newMember = $_POST['edit_member'];
     $data = array('duty' => $newDutyName, 'start_time' => $newStartTime, 'end_time' => $newEndTime, 'member' => $newMember);
-    $wpdb->update($wpdb->prefix . 'cwp_dutys', $data, array('ID' => $dutyID));
+    $wpdb->update(CWP_DUTY_TABLE, $data, array('ID' => $dutyID));
 
     $redirectUrl = sprintf("/wp-admin/admin.php?page=%s&eventID=%s", "club-workplan", $eventID);
 
@@ -21,42 +21,38 @@ function submit_update_duty() {
 
 function cwp_duty_edit() {
     $dutyID = $_GET['duty'];
-    $dutyData = getDuty($dutyID);
-
-?>
+    $dutyDto = get_duty($dutyID);
+    ?>
 
     <div class="wrap">
         <h1>Edit Duty</h1>
         <form method="post" action="<?php echo admin_url("admin-post.php"); ?>">
             <input type="hidden" name="action" value="update-duty" />
-            <input type="hidden" name="duty_id" value="<?php echo $dutyData->id; ?>" />
-            <input type="hidden" name="event_id" value="<?php echo $dutyData->eventID; ?>" />
+            <input type="hidden" name="duty_id" value="<?php echo $dutyDto->id; ?>" />
+            <input type="hidden" name="event_id" value="<?php echo $dutyDto->eventID; ?>" />
 
             <table class="form-table" role="presentation">
                 <tr>
                     <th scope="row"><label>Duty Name</label></th>
-                    <td><input name="edit_duty_name" type="text" value="<?php echo $dutyData->duty; ?>" /></td>
+                    <td><input name="edit_duty_name" type="text" value="<?php echo $dutyDto->duty; ?>" /></td>
                 </tr>
                 <tr>
                     <th scope="row"><label>Start Time</label></th>
-                    <td><input name="edit_start_time" type="time" value="<?php echo $dutyData->startTime; ?>" /></td>
+                    <td><input name="edit_start_time" type="time" value="<?php echo $dutyDto->startTime; ?>" /></td>
                 </tr>
                 <tr>
                     <th scope="row"><label>End Time</label></th>
-                    <td><input name="edit_end_time" type="time" value="<?php echo $dutyData->endTime; ?>" /></td>
+                    <td><input name="edit_end_time" type="time" value="<?php echo $dutyDto->endTime; ?>" /></td>
                 </tr>
                 <tr>
                     <th scope="row"><label>Member</label></th>
-                    <td><input name="edit_member" type="text" value="<?php echo $dutyData->member; ?>" /></td>
+                    <td><input name="edit_member" type="text" value="<?php echo $dutyDto->member; ?>" /></td>
                 </tr>
             </table>
 
             <?php submit_button(__('Update duty'), 'primary', 'update-duty', true); ?>
         </form>
     </div>
-
-<?php
-
+    <?php
 }
-
 ?>

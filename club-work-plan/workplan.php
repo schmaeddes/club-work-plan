@@ -7,12 +7,20 @@
  * Version: 0.1
  * Author: schmaeddes
  * Author URI: https://www.schmaeddes.de/
- **/
+**/
+
+define('CWP_PLUGIN_PATH', plugin_dir_path(__FILE__));
+define('CWP_EVENT_TABLE', $wpdb->prefix . 'cwp_events');
+define('CWP_DUTY_TABLE', $wpdb->prefix . 'cwp_dutys');
+
+require_once(CWP_PLUGIN_PATH . 'includes/Duty.php');
+require_once(CWP_PLUGIN_PATH . 'includes/Event.php');
+require_once(CWP_PLUGIN_PATH . 'includes/utils.php');
+require_once(CWP_PLUGIN_PATH . 'admin/admin_menu.php');
 
 /**
  * Create custom table at activation of plugin 
  */
-
 register_activation_hook(__FILE__, 'create_workplan_tables');
 function create_workplan_tables() {
 	global $wpdb;
@@ -46,27 +54,57 @@ function create_workplan_tables() {
 	dbDelta($sql);
 }
 
-include 'setup.php';
-include 'includes/Duty.php';
-include 'includes/Event.php';
-include 'admin/adminMenu.php';
+/**
+ * Add template to dropdown
+ */
+add_filter('theme_page_templates', 'add_page_template_to_dropdown');
+function add_page_template_to_dropdown($templates) {
+	$templates[CWP_PLUGIN_PATH . 'templates/workplan_template.php'] = __('Club Workplan', 'text-domain');
+
+	return $templates;
+}
+
+add_filter('template_include', 'change_page_template', 99);
+function change_page_template($template) {
+	if (is_page()) {
+		$meta = get_post_meta(get_the_ID());
+
+		if (!empty($meta['_wp_page_template'][0]) && $meta['_wp_page_template'][0] != $template) {
+			$template = $meta['_wp_page_template'][0];
+		}
+	}
+
+	return $template;
+}
+
+/**
+ * Add custom css
+ */
+add_action('wp_enqueue_scripts', 'callback_for_setting_up_scripts');
+function callback_for_setting_up_scripts() {
+	wp_enqueue_style('your-stylesheet-name', plugins_url('css/workplan.css', __FILE__), false, '1.0.0', 'all');
+}
 
 add_action('admin_post_nopriv_add-member', 'submit_add_member');
 function submit_add_member() {
-    global $wpdb;
+	global $wpdb;
 
-    $dutyID = $_POST['duty_id'];
-    $slug = $_POST['page_id'];
-    $newMemberName = $_POST['member'];
-    $data = array('member' => $newMemberName);
-    $wpdb->update($wpdb->prefix . 'cwp_dutys', $data, array('ID' => $dutyID));
+	$dutyID = $_POST['duty_id'];
+	$slug = $_POST['page_id'];
+	$newMemberName = $_POST['member'];
+	$data = array('member' => $newMemberName);
+
+	$getMember = $wpdb->get_row("SELECT `member` FROM `wp_workplan_dutys` WHERE `id` = '$dutyID'");
+	if ($getMember == "" && $getMember != $newMemberName) {
+		$wpdb->update(CWP_DUTY_TABLE, $data, array('ID' => $dutyID));
+	}
 
 	wp_safe_redirect(site_url('/' . $slug));
 }
 
 function get_workplan_for_event($eventID) {
-	$eventDto = getEventData($eventID);
-	$dutyData = getDutys($eventID);
+	$eventDto = get_event_data($eventID);
+	$dutyData = get_duties($eventID);
 
 	echo '<h1>' . $eventDto->name . '</h1>';
 	echo '<h1>' . $eventDto->description . '</h1>';
@@ -84,14 +122,13 @@ function create_duty_list_for_dutyName($dutyName, $dutys) {
 	global $post;
 	$slug = $post->post_name;
 
-	$current_user = wp_get_current_user();
 	$hasNewStartTime = true;
 	$startTimeOfLastDuty = "";
-	
+
 	echo '<br><div class="dienstBar">' . $dutyName . '</div><br>';
 
 	foreach ($dutys as $duty) {
-		$dutyDto = new Duty($duty);
+		$dutyDto = Duty::from_array($duty);
 
 		if ($hasNewStartTime == true) {
 			echo '<div class="zeitBoxNachZeit">';
@@ -117,19 +154,9 @@ function create_duty_list_for_dutyName($dutyName, $dutys) {
 		echo '</div>';
 
 		if ($dutyDto->member != "") {
-			$splittedName = $dutyDto->member;
-
-			if ($dutyDto->member != "Adler Meindorf") {
-				$splittedName = substr($dutyDto->member, 0, stripos($dutyDto->member, " ")) . " " . substr($dutyDto->member, stripos($dutyDto->member, " "), 2) . ".";
-			}
-
-			echo '<div class="mitgliedsName">' . $splittedName . '</div>';
-
-			if (user_can($current_user, 'administrator')) {
-				//echo '<a href="http://mann.schmaeddes.de/deletemitglied?id='. $dutyDto->id .'&mitglied='. $dutyDto->member .'"><div class="deleteButtonAdmin">X</div></a>';
-			}
+			echo '<div class="mitgliedsName">' . $dutyDto->member . '</div>';
 		} else {
-			?>
+?>
 			<div class="eingabeFeld">
 				<form action="<?php echo admin_url("admin-post.php"); ?>" method="post">
 					<input type="hidden" name="action" value="add-member" />
@@ -139,79 +166,9 @@ function create_duty_list_for_dutyName($dutyName, $dutys) {
 					<input type="submit" name="add-member" id="add-member" class="button button-primary" value="Add Member" />
 				</form>
 			</div>
-			<?php 
+<?php
 		}
 		echo '</div>';
 	}
 	echo '</div>';
-}
-
-
-function submitMitglied() {
-	global $wpdb;
-	$member = $_GET["member"];
-	$dutyID = $_GET["dutyID"];
-	$eventID = $_GET["eventID"];
-
-	$getMember = $wpdb->get_row("SELECT `member` FROM `wp_workplan_dutys` WHERE `id` = '$dutyID'");
-	
-	if ($getMember == "" && $getMember != $member) {
-		$wpdb->update($wpdb->prefix . 'cwp_dutys', array('member' => $member), array('ID' => $dutyID));
-	}
-
-	$redirectUrl = sprintf("/wp-admin/admin.php?page=%s&eventID=%s", "club-workplan", $eventID);
-
-	wp_safe_redirect(site_url($redirectUrl));
-}
-
-function deleteMitglied() {
-	global $wpdb;
-	$mitglied = $_GET["mitglied"];
-	$id = $_GET["id"];
-	$wpdb->update('wp_workplan_dutys', array('mitglied' => NULL), array('id' => $id));
-
-	
-}
-
-function getEventData($eventID) {
-	global $wpdb;
-	$eventData = $wpdb->get_row("SELECT * FROM `wp_cwp_events` WHERE id = '$eventID'");
-
-	return new Event($eventData);
-}
-
-function getDutys($eventID) {
-	global $wpdb;
-	$dutyData = $wpdb->get_results("SELECT * FROM `wp_cwp_dutys` WHERE event_id = '$eventID'", ARRAY_N);
-
-	return $dutyData;
-}
-
-function getDuty($dutyID) {
-	global $wpdb;
-	$dutyData = $wpdb->get_row("SELECT * FROM `wp_cwp_dutys` WHERE id = '$dutyID'");
-
-	return new Duty($dutyData);
-}
-
-function get_unique_list_of_dutyNames($dutyData) {
-	$arr = array();
-	foreach ($dutyData as $duty) {
-		$arr[] = $duty[2];
-	}
-	$unique_data = array_unique($arr);
-
-	return $unique_data;
-}
-
-function get_dutys_from_dutyName($dutyName, $dutyData) {
-	$dutys = array();
-
-	foreach ($dutyData as $duty) {
-		if ($duty[2] == $dutyName) {
-			array_push($dutys, $duty);
-		}
-	}
-
-	return $dutys;
 }

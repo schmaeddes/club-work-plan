@@ -4,7 +4,7 @@ if (!class_exists('WP_List_Table')) {
     require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
 }
 
-class EventsTable extends WP_List_Table {
+class Events_Table extends WP_List_Table {
     private $table_data;
 
     function prepare_items() {
@@ -24,7 +24,7 @@ class EventsTable extends WP_List_Table {
     private function get_table_data() {
         global $wpdb;
 
-        $table = $wpdb->prefix . 'cwp_events';
+        $table = CWP_EVENT_TABLE;
 
         return $wpdb->get_results(
             "SELECT * from {$table}",
@@ -77,10 +77,10 @@ class EventsTable extends WP_List_Table {
     function get_columns() {
         return array(
             'cb'                => '<input type="checkbox" />',
-            'id'                => __('ID', 'cwp_events'),
-            'event_name'        => __('Event Name', 'cwp_events'),
-            'event_description' => __('Description', 'cwp_events'),
-            'date_of_event'     => __('Date of event', 'cwp_events')
+            'id'                => __('ID', CWP_EVENT_TABLE),
+            'event_name'        => __('Event Name', CWP_EVENT_TABLE),
+            'event_description' => __('Description', CWP_EVENT_TABLE),
+            'date_of_event'     => __('Date of event', CWP_EVENT_TABLE)
         );
     }
 
@@ -90,7 +90,7 @@ class EventsTable extends WP_List_Table {
         $eventID = $item['id'];
 
         $actions = array(
-            'edit'    => sprintf('<a href="?page=%s&eventID=%s&action=%s">' . __('Edit', 'wp_cwp_dutys') . '</a>', 'club-workplan', $eventID, 'edit_event'),
+            'edit'    => sprintf('<a href="?page=%s&eventID=%s&action=%s">' . __('Edit', CWP_DUTY_TABLE) . '</a>', 'club-workplan', $eventID, 'edit_event'),
         );
 
         return sprintf('<strong><a href="%s">%s</a></strong> %s', $link, $eventName, $this->row_actions($actions));

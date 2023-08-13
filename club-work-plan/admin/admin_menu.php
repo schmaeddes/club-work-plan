@@ -1,12 +1,9 @@
 <?php
 
-include(plugin_dir_path(__DIR__) . 'admin/eventsMenu.php');
-include(plugin_dir_path(__DIR__) . 'admin/dutiesMenu.php');
-include(plugin_dir_path(__DIR__) . 'admin/editEvent.php');
-include(plugin_dir_path(__DIR__) . 'admin/editDuty.php');
-
-include(plugin_dir_path(__DIR__) . 'includes/EventsTable.php');
-include(plugin_dir_path(__DIR__) . 'includes/DutysTable.php');
+require_once(CWP_PLUGIN_PATH . 'admin/events_menu.php');
+require_once(CWP_PLUGIN_PATH . 'admin/duties_menu.php');
+require_once(CWP_PLUGIN_PATH . 'admin/edit_event.php');
+require_once(CWP_PLUGIN_PATH . 'admin/edit_duty.php');
 
 add_action('admin_menu', 'add_workplan_setup_menu');
 function add_workplan_setup_menu() {
@@ -20,7 +17,7 @@ function submit_create_event() {
     $newEventDescription = $_POST['new_event_description'];
     $newEventDate = $_POST['new_event_date'];
     $data = array('event_name' => $newEventName, 'event_description' => $newEventDescription, 'date_of_event' => $newEventDate);
-    $wpdb->insert($wpdb->prefix . 'cwp_events', $data);
+    $wpdb->insert(CWP_EVENT_TABLE, $data);
 
     wp_safe_redirect(esc_url(site_url('/wp-admin/admin.php?page=club-workplan')));
 }

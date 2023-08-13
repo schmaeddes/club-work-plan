@@ -10,13 +10,32 @@ class Duty {
     public $member;
     public $dateOfEntry;
 
-    function __construct($array) {
-        $this->id = $array[0];
-        $this->eventID = $array[1];
-        $this->duty = $array[2];
-        $this->startTime = $array[3];
-        $this->endTime = $array[4];
-        $this->member = $array[5];
-        $this->dateOfEntry = $array[6];
+    function __construct() {
+    }
+
+    public static function from_row($row) {
+        $instance = new self();
+        $instance->id = $row->id;
+        $instance->eventID = $row->event_id;
+        $instance->duty = $row->duty;
+        $instance->startTime = $row->start_time;
+        $instance->endTime = $row->end_time;
+        $instance->member = $row->member;
+        $instance->dateOfEntry = $row->date_of_entry;
+
+        return $instance;
+    }
+
+    public static function from_array($array) {
+        $instance = new self();
+        $instance->id = $array[0];
+        $instance->eventID = $array[1];
+        $instance->duty = $array[2];
+        $instance->startTime = $array[3];
+        $instance->endTime = $array[4];
+        $instance->member = $array[5];
+        $instance->dateOfEntry = $array[6];
+
+        return $instance;
     }
 }
