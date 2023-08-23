@@ -8,8 +8,7 @@ class Duties_Table extends WP_List_Table {
     private $table_data;
 
     function prepare_items($eventID = '') {
-
-        if (isset($_GET['action']) && $_GET['page'] == "club-workplan" && $_GET['action'] == "delete") {
+        if (isset($_GET['action']) && $_GET['page'] == "club-workplan" && $_GET['action'] == "delete_duty") {
             global $wpdb;
             $dutyID = $_GET['duty'];
             $wpdb->delete(CWP_DUTY_TABLE, array('ID' => $dutyID));
