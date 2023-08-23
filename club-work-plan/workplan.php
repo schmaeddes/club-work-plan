@@ -85,6 +85,7 @@ function callback_for_setting_up_scripts() {
 	wp_enqueue_style('your-stylesheet-name', plugins_url('css/workplan.css', __FILE__), false, '1.0.0', 'all');
 }
 
+add_action('admin_post_add-member', 'submit_add_member');
 add_action('admin_post_nopriv_add-member', 'submit_add_member');
 function submit_add_member() {
 	global $wpdb;
@@ -94,7 +95,7 @@ function submit_add_member() {
 	$newMemberName = $_POST['member'];
 	$data = array('member' => $newMemberName);
 
-	$getMember = $wpdb->get_row("SELECT `member` FROM `wp_workplan_dutys` WHERE `id` = '$dutyID'");
+	$getMember = $wpdb->get_row("SELECT `member` FROM " + CWP_DUTY_TABLE + " WHERE `id` = '$dutyID'");
 	if ($getMember == "" && $getMember != $newMemberName) {
 		$wpdb->update(CWP_DUTY_TABLE, $data, array('ID' => $dutyID));
 	}
