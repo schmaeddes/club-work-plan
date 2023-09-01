@@ -17,6 +17,7 @@
 - [ ] Deletable events via bulk action (with linked duties)
 - [ ] Show Dates formatted from settings
       get_option('date_format'), strtotime($dutyData->endTime);
+- [ ] Add options
 
 ## 🐞 Bugs
 
