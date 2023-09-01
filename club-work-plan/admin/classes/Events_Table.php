@@ -4,8 +4,8 @@ if (!class_exists('WP_List_Table')) {
     require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
 }
 
-add_action( 'admin_notices_delete-event', 'sample_admin_notice__info', 1, 2);
-function sample_admin_notice__info($eventData, $numberOfDeletedRows) {
+add_action( 'admin_notices_delete-event', 'event_delete_notice__info', 1, 2);
+function event_delete_notice__info($eventData, $numberOfDeletedRows) {
 	$class = 'notice notice-info';
 	$message = __( $eventData->name . ' was deleted and with it ' . $numberOfDeletedRows . ' duties.', 'sample-text-domain' );
 
@@ -21,9 +21,11 @@ class Events_Table extends WP_List_Table {
             $eventID = $_GET['eventID'];
             $eventData = get_event_data($eventID);
 
-            $wpdb->delete(CWP_EVENT_TABLE, array('ID' => $eventID));
-            $numberOfDeletedRows = $wpdb->delete(CWP_DUTY_TABLE, array('EVENT_ID' => $eventID));
-            do_action('admin_notices_delete-event', $eventData, $numberOfDeletedRows);
+            if ($eventData->name != null) {
+                $wpdb->delete(CWP_EVENT_TABLE, array('ID' => $eventID));
+                $numberOfDeletedRows = $wpdb->delete(CWP_DUTY_TABLE, array('EVENT_ID' => $eventID));
+                do_action('admin_notices_delete-event', $eventData, $numberOfDeletedRows);
+            }
         }
 
         $this->table_data = $this->get_table_data();

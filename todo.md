@@ -8,7 +8,6 @@
 ### Admin Page
 - [x] Edit Event
 - [x] Edit Duty
-- [ ] Show admin_notice if event or duty is edited
 - [x] Show admin_notice if event or duty is deleted
 - [ ] Show Alert if event should be deleted because duties will also be deleted 
 - [x] Deletable duties with row action

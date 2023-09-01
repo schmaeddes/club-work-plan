@@ -4,6 +4,14 @@ if (!class_exists('WP_List_Table')) {
     require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
 }
 
+add_action( 'admin_notices_delete-duty', 'duty_delete_notice__info', 1, 1);
+function duty_delete_notice__info($dutyData) {
+	$class = 'notice notice-info';
+	$message = __( $dutyData->duty . ' was deleted.', 'sample-text-domain' );
+
+	printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
+}
+
 class Duties_Table extends WP_List_Table {
     private $table_data;
 
@@ -11,7 +19,12 @@ class Duties_Table extends WP_List_Table {
         if (isset($_GET['action']) && $_GET['page'] == "club-workplan" && $_GET['action'] == "delete_duty") {
             global $wpdb;
             $dutyID = $_GET['duty'];
-            $wpdb->delete(CWP_DUTY_TABLE, array('ID' => $dutyID));
+            $dutyData = get_duty($dutyID);
+
+            if ($dutyData->duty != null) {
+                $wpdb->delete(CWP_DUTY_TABLE, array('ID' => $dutyID));
+                do_action('admin_notices_delete-duty', $dutyData);
+            }
         }
 
         $this->table_data = $this->get_table_data($eventID);

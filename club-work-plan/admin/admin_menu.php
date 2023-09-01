@@ -27,6 +27,8 @@ function club_workplan() {
         cwp_event_edit();
     } else if (isset($_GET['action']) && isset($_GET['duty']) && $_GET['action'] == "edit_duty") {
         cwp_duty_edit();
+    } else if (isset($_GET['action']) && isset($_GET['duty']) && $_GET['action'] == "delete_duty") {
+        cwp_duties_view();
     } else if (!isset($_GET['action']) && isset($_GET['eventID'])) {
         cwp_duties_view();
     } else {
