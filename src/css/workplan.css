@@ -52,9 +52,9 @@ Sie verändert das Layout für die Männerei.
 }
 
 .dienstBar {
-	margin: 20px auto 20px auto;
+	/*margin: 20px auto 20px auto;*/
 	width: 100%;
-	float: left;
+	/*float: left;*/
 	font-family: "Open Sans", Helvetica, Arial, sans-serif;
 	font-size: 12pt;
 	border-bottom: 1px solid #dbdbdb;
@@ -84,7 +84,6 @@ Sie verändert das Layout für die Männerei.
 
 .zeitBoxNachZeit {
 	width: 100%;
-	max-width: 690px;
 	margin: 25px auto 0 auto;
 	text-align: center;
 }

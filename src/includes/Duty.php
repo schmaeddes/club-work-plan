@@ -1,5 +1,7 @@
 <?php
 
+namespace includes;
+
 class Duty {
 
     public $id;
