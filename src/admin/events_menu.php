@@ -39,7 +39,7 @@ function cwp_create_event() {
     <?php
 }
 
-function get_event_table_stlye() {
+function get_event_table_stlye(): void {
     echo '<style type="text/css">';
     echo '.wp-list-table .column-id { width: 5%; }';
     echo '.wp-list-table .column-event_name { width: 30%; }';

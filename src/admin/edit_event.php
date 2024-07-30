@@ -15,7 +15,7 @@ function submit_update_event() {
     wp_safe_redirect(esc_url(site_url('/wp-admin/admin.php?page=club-workplan')));
 }
 
-function cwp_event_edit() {
+function cwp_event_edit(): void {
     $eventID = $_GET['eventID'];
     $eventData = get_event_data($eventID);
 

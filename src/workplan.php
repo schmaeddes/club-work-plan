@@ -71,66 +71,37 @@ function babedibu( $content ) {
 }
 
 /**
- * Add template to dropdown
- */
-//add_filter('theme_page_templates', 'add_page_template_to_dropdown');
-//function add_page_template_to_dropdown($templates) {
-//	$templates[CWP_PLUGIN_PATH . 'templates/workplan_template.php'] = __('Club Workplan', 'text-domain');
-//
-//	return $templates;
-//}
-//
-//add_filter('template_include', 'change_page_template', 99);
-//function change_page_template($template) {
-//	if (is_page()) {
-//        $customId = get_post_custom_values('cwp_event_id', get_the_ID())[0];
-//
-//		if (!empty($customId)) {
-//            $meta = get_post_meta(get_the_ID());
-//			$template = $meta['_wp_page_template'][0];
-//		}
-//	}
-//
-//	return $template;
-//}
-
-/**
  * Add custom css
  */
-add_action( 'wp_enqueue_scripts', 'callback_for_setting_up_scripts' );
-function callback_for_setting_up_scripts() {
+add_action( 'wp_enqueue_scripts', 'callbackForSettingUpScripts' );
+function callbackForSettingUpScripts(): void {
 	wp_enqueue_style( 'your-stylesheet-name', plugins_url( 'css/workplan.css', __FILE__ ), false, '1.0.0', 'all' );
 }
 
-add_action( 'admin_post_add-member', 'submit_add_member' );
-add_action( 'admin_post_nopriv_add-member', 'submit_add_member' );
-function submit_add_member() {
-	global $wpdb;
-
+add_action( 'admin_post_add-member', 'submitAddMember' );
+add_action( 'admin_post_nopriv_add-member', 'submitAddMember' );
+function submitAddMember(): void {
 	$dutyID        = $_POST['duty_id'];
 	$slug          = $_POST['page_id'];
 	$newMemberName = $_POST['member'];
-	$data          = array( 'member' => $newMemberName );
 
-	$getMember = $wpdb->get_row( "SELECT `member` FROM " + CWP_DUTY_TABLE + " WHERE `id` = '$dutyID'" );
-	if ( $getMember == "" && $getMember != $newMemberName ) {
-		$wpdb->update( CWP_DUTY_TABLE, $data, array( 'ID' => $dutyID ) );
+	$duty = get_duty($dutyID);
+	if ( $duty->member == "" && $duty->member != $newMemberName ) {
+		update_member($dutyID, $newMemberName);
 	}
 
-	wp_safe_redirect( site_url( '/' . $slug ) );
+	wp_safe_redirect( get_permalink( $slug ) );
 }
 
 function get_workplan_for_event( $eventID ) {
-
-
 	$eventDto = get_event_data( $eventID );
 	$dutyData = get_duties( $eventID );
 
-	$krasserString = '<div class="daemmerSchoppen">' . $eventDto->name . '</div>';
-	$krasserString .= '<div class="daemmerSchoppen">' . $eventDto->description . '</div>';
-	$krasserString .= '<div class="daemmerSchoppen">' . $eventDto->date . '</div>';
+	$krasserString = '<h2>' . $eventDto->name . '</h2>';
+	$krasserString .= '<h3>' . $eventDto->description . '</h3>';
+	$krasserString .= '<h4>' . $eventDto->date . '</h4>';
 
-	$dutyNames = get_unique_list_of_dutyNames( $dutyData );
+	$dutyNames = get_unique_list_of_duty_names( $dutyData );
 
 	foreach ( $dutyNames as $dutyName ) {
 		$duties        = get_dutys_from_dutyName( $dutyName, $dutyData );
@@ -142,7 +113,7 @@ function get_workplan_for_event( $eventID ) {
 
 function create_duty_list_for_dutyName( $dutyName, $duties ) {
 	global $post;
-	$slug = $post->post_name;
+	$slug = $post->ID;
 
 	$hasNewStartTime     = true;
 	$startTimeOfLastDuty = "";
@@ -162,9 +133,9 @@ function create_duty_list_for_dutyName( $dutyName, $duties ) {
 		}
 
 		if ( $dutyDto->member != "" ) {
-			$krasserString .= '<div class="zeitBoxVoll">';
+			$krasserString .= '<div class="duty-box booked">';
 		} else {
-			$krasserString .= '<div class="zeitBoxLeer">';
+			$krasserString .= '<div class="duty-box">';
 		}
 
 		$krasserString .= '<div class="artDesDienstes">' . $dutyName . '</div><div class="zeitDesDienstes">';
@@ -178,16 +149,16 @@ function create_duty_list_for_dutyName( $dutyName, $duties ) {
 		if ( $dutyDto->member != "" ) {
 			$krasserString .= '<div class="mitgliedsName">' . $dutyDto->member . '</div>';
 		} else {
-
-			$krasserString .= '<div class="eingabeFeld">
-				<form action="' . admin_url( "admin-post.php" ) . '" method="post">
-					<input type="hidden" name="action" value="add-member" />
-					<input type="hidden" name="duty_id" value="' . $dutyDto->id . '">
-					<input type="hidden" name="page_id" value="' . $slug . '">
-					<input type="text" name="member" size="25" maxlength="30">
-					<input type="submit" name="add-member" id="add-member" class="button button-primary" value="Add Member" />
-				</form>
-			</div>';
+			$krasserString .=
+				'
+					<form action="'.  admin_url( "admin-post.php" ) . '" method="post">
+						<input type="hidden" name="action" value="add-member" />
+						<input type="hidden" name="duty_id" value="' . $dutyDto->id . '">
+						<input type="hidden" name="page_id" value="' . $slug . '">
+						<input type="text" name="member" class="member-input-field" size="25" maxlength="30">
+						<input type="submit" name="add-member" class="add-member" class="button button-primary" value="Add" />
+					</form>
+				';
 
 		}
 		$krasserString .= '</div>';

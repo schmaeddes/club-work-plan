@@ -9,46 +9,32 @@ Sie verändert das Layout für die Männerei.
 
 */
 
-/* --------------- Arbeistplan --------------- */
+/* --------------- Arbeitsplan --------------- */
 
-.zeitBoxLeer, .zeitBoxVoll {
-	width: 200px;
-	height: 50px;
-	border-radius: 5px;
-	margin: 15px 0 0 15px;
+.duty-box {
+	width: 250px;
+	height: 60px;
+	/*margin: 15px 0 0 15px;*/
 	display: inline-block;
 	padding: 5px 5px 2px 5px;
 	font-size: 12px;
+	box-sizing: border-box;
+	background-color: lightgray;
 }
 
-.zeitBoxLeer {
-	background: #eeeeee;
-	background:    -moz-linear-gradient(top, #eeeeee 0%, #cccccc 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#cccccc));
-	background: -webkit-linear-gradient(top, #eeeeee 0%,#cccccc 100%);
-	background:      -o-linear-gradient(top, #eeeeee 0%,#cccccc 100%);
-	background:     -ms-linear-gradient(top, #eeeeee 0%,#cccccc 100%);
-	background: 		linear-gradient(to bottom, #eeeeee 0%,#cccccc 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 );
-	-webkit-box-shadow: 0px 0px 8px -2px rgba(0,0,0,0.5);
-	   -moz-box-shadow: 0px 0px 8px -2px rgba(0,0,0,0.5);
-			box-shadow: 0px 0px 8px -2px rgba(0,0,0,0.5);
-	border: 1px solid #dbdbdb;
+.zeitBoxNachZeit {
+	width: 100%;
+	margin: 25px auto 0 auto;
+	text-align: center;
+	display: flex;
+	gap: 10px;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
 }
 
-.zeitBoxVoll {
-	background: #a9db80; /* Old browsers */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#a9db80), color-stop(100%,#96c56f)); /* Chrome,Safari4+ */
-	background:    -moz-linear-gradient(top,  #a9db80 0%, #96c56f 100%); /* FF3.6+ */
-	background: -webkit-linear-gradient(top,  #a9db80 0%,#96c56f 100%); /* Chrome10+,Safari5.1+ */
-	background:      -o-linear-gradient(top,  #a9db80 0%,#96c56f 100%); /* Opera 11.10+ */
-	background:     -ms-linear-gradient(top,  #a9db80 0%,#96c56f 100%); /* IE10+ */
-	background:			linear-gradient(to bottom,  #a9db80 0%,#96c56f 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a9db80', endColorstr='#96c56f',GradientType=0 ); /* IE6-9 */
-	-webkit-box-shadow: 0px 0px 8px -2px rgba(157,211,113,1);
-	   -moz-box-shadow: 0px 0px 8px -2px rgba(157,211,113,1);
-			box-shadow: 0px 0px 8px -2px rgba(157,211,113,1);
-	border: 1px solid #9dd371;
+.booked {
+	background-color: lightgreen;
 }
 
 .dienstBar {
@@ -82,11 +68,7 @@ Sie verändert das Layout für die Männerei.
 	margin-left: -30px;
 }
 
-.zeitBoxNachZeit {
-	width: 100%;
-	margin: 25px auto 0 auto;
-	text-align: center;
-}
+
 
 .dankeUndZurueck {
 	text-align: center;
@@ -113,15 +95,17 @@ Sie verändert das Layout für die Männerei.
 	font-weight: bold;
 }
 
-.eingabeFeld {
-	margin-top: 18px;
-}
-
 .formMitglied {
 	width: 160px;
 }
 
+.add-member {
+	width: 15%;
+	height: 20px;
+}
 
+.member-input-field {
+	width: 80%;
+}
 
 /* NEUES ZEUG */
-

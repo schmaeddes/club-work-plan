@@ -6,14 +6,14 @@ add_action('admin_post_create-duty', 'submit_create_duty');
 function submit_create_duty() {
     global $wpdb;
     $totalPagesOfTable = $_POST['total_pages'];
-    $numberOfDutys = (int)$_POST['number_of_dutys'];
+    $numberOfDuties = (int)$_POST['number_of_dutys'];
 
     $newDutyEventID = $_POST['new_duty_event_id'];
     $newDutyName = $_POST['new_duty_name'];
     $newStartTime = $_POST['new_start_time'];
     $newEndTime = $_POST['new_end_time'];
 
-    for ($i = 1; $i <= $numberOfDutys; $i++) {
+    for ($i = 1; $i <= $numberOfDuties; $i++) {
         $data = array(
             'event_id' => $newDutyEventID,
             'duty' => $newDutyName,

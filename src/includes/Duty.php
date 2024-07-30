@@ -12,10 +12,11 @@ class Duty {
     public $member;
     public $dateOfEntry;
 
-    function __construct() {
+    private function __construct() {
+		// empty
     }
 
-    public static function from_row($row) {
+    public static function from_row($row): Duty {
         $instance = new self();
         $instance->id = $row->id;
         $instance->eventID = $row->event_id;
@@ -28,7 +29,7 @@ class Duty {
         return $instance;
     }
 
-    public static function from_array($array) {
+    public static function from_array($array): Duty {
         $instance = new self();
         $instance->id = $array[0];
         $instance->eventID = $array[1];
