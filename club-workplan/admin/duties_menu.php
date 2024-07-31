@@ -71,7 +71,7 @@ function cwp_duties_view() {
                 </tr>
             </table>
 
-            <?php submit_button(__('Add duty'), 'primary', 'create-duty', true); ?>
+            <?php submit_button(__('Add duties'), 'primary', 'create-duty', true); ?>
         </form>
     </div>
 <?php

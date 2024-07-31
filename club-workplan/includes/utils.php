@@ -1,6 +1,6 @@
 <?php
 
-use includes\Duty;
+use cwp\includes\Duty;
 
 function get_event_data($eventID): Event {
 	global $wpdb;

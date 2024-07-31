@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name: Club Work Plan
+ * Plugin Name: Club WorkPlan
  * Plugin URI: https://github.com/schmaeddes/club-work-plan
  * Description: A WordPress plugin to create a work schedule for a local festival so that the club can plan the responsibilities for members.
  * Version: 0.1
@@ -9,7 +9,7 @@
  * Author URI: https://www.schmaeddes.de/
  **/
 
-use includes\Duty;
+use cwp\includes\Duty;
 
 define( 'CWP_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'CWP_EVENT_TABLE', $wpdb->prefix . 'cwp_events' );
@@ -57,14 +57,14 @@ function create_workplan_tables() {
 }
 
 
-add_filter( 'the_content', 'babedibu' );
-function babedibu( $content ) {
+add_filter( 'the_content', 'add_workplan_to_content' );
+function add_workplan_to_content( $content ) {
 	if ( is_page() ) {
 		$customId = get_post_custom_values( 'cwp_event_id', get_the_ID() )[0];
 	}
 
 	if ( ! empty( $customId ) ) {
-		return $content . get_workplan_for_event( 3 );
+		return $content . get_workplan_for_event( $customId );
 	}
 
 	return $content;
@@ -85,9 +85,9 @@ function submitAddMember(): void {
 	$slug          = $_POST['page_id'];
 	$newMemberName = $_POST['member'];
 
-	$duty = get_duty($dutyID);
+	$duty = get_duty( $dutyID );
 	if ( $duty->member == "" && $duty->member != $newMemberName ) {
-		update_member($dutyID, $newMemberName);
+		update_member( $dutyID, $newMemberName );
 	}
 
 	wp_safe_redirect( get_permalink( $slug ) );
@@ -97,73 +97,71 @@ function get_workplan_for_event( $eventID ) {
 	$eventDto = get_event_data( $eventID );
 	$dutyData = get_duties( $eventID );
 
-	$krasserString = '<h2>' . $eventDto->name . '</h2>';
-	$krasserString .= '<h3>' . $eventDto->description . '</h3>';
-	$krasserString .= '<h4>' . $eventDto->date . '</h4>';
+	$workPlan = '<h2>' . $eventDto->name . '</h2>';
+	$workPlan .= '<h3>' . $eventDto->description . '</h3>';
+	$workPlan .= '<h4>' . $eventDto->date . '</h4>';
 
 	$dutyNames = get_unique_list_of_duty_names( $dutyData );
 
 	foreach ( $dutyNames as $dutyName ) {
 		$duties        = get_dutys_from_dutyName( $dutyName, $dutyData );
-		$krasserString .= create_duty_list_for_dutyName( $dutyName, $duties );
+		$workPlan .= create_duty_list_for_dutyName( $dutyName, $duties );
 	}
 
-	return $krasserString;
+	return $workPlan;
 }
 
 function create_duty_list_for_dutyName( $dutyName, $duties ) {
 	global $post;
-	$slug = $post->ID;
-
 	$hasNewStartTime     = true;
 	$startTimeOfLastDuty = "";
 
-	$krasserString = '<br><div class="dienstBar">' . $dutyName . '</div><br>';
+	$workPlan = '<br><div class="dutyTitle">' . $dutyName . '</div><br>';
 
 	foreach ( $duties as $duty ) {
 		$dutyDto = Duty::from_array( $duty );
 
 		if ( $hasNewStartTime ) {
-			$krasserString       .= '<div class="zeitBoxNachZeit">';
+			$workPlan            .= '<div class="dutyTimedBlock flex">';
 			$startTimeOfLastDuty = $dutyDto->startTime;
 			$hasNewStartTime     = false;
 		} elseif ( $dutyDto->startTime != $startTimeOfLastDuty ) {
-			$krasserString       .= '</div><div class="zeitBoxNachZeit">';
+			$workPlan            .= '</div><div class="dutyTimedBlock flex">';
 			$startTimeOfLastDuty = $dutyDto->startTime;
 		}
 
 		if ( $dutyDto->member != "" ) {
-			$krasserString .= '<div class="duty-box booked">';
+			$workPlan .= '<div class="duty-box flex booked">';
 		} else {
-			$krasserString .= '<div class="duty-box">';
+			$workPlan .= '<div class="duty-box flex">';
 		}
 
-		$krasserString .= '<div class="artDesDienstes">' . $dutyName . '</div><div class="zeitDesDienstes">';
+		$workPlan .= '<div class="dutyType">' . $dutyName . '</div><div class="dutyTime">';
 		if ( $dutyDto->endTime != "" ) {
-			$krasserString .= sprintf( "%.5s - %.5s", $dutyDto->startTime, $dutyDto->endTime );
+			$workPlan .= sprintf( "%.5s - %.5s", $dutyDto->startTime, $dutyDto->endTime );
 		} else {
-			$krasserString .= sprintf( "ab %.5s", $dutyDto->startTime );
+			$workPlan .= sprintf( "ab %.5s", $dutyDto->startTime );
 		}
-		$krasserString .= '</div>';
+		$workPlan .= '</div>';
 
 		if ( $dutyDto->member != "" ) {
-			$krasserString .= '<div class="mitgliedsName">' . $dutyDto->member . '</div>';
+			$workPlan .= '<div class="memberName">' . $dutyDto->member . '</div>';
 		} else {
-			$krasserString .=
+			$workPlan .=
 				'
-					<form action="'.  admin_url( "admin-post.php" ) . '" method="post">
+					<form action="' . admin_url( "admin-post.php" ) . '" method="post">
 						<input type="hidden" name="action" value="add-member" />
 						<input type="hidden" name="duty_id" value="' . $dutyDto->id . '">
-						<input type="hidden" name="page_id" value="' . $slug . '">
+						<input type="hidden" name="page_id" value="' . $post->ID . '">
 						<input type="text" name="member" class="member-input-field" size="25" maxlength="30">
 						<input type="submit" name="add-member" class="add-member" class="button button-primary" value="Add" />
 					</form>
 				';
 
 		}
-		$krasserString .= '</div>';
+		$workPlan .= '</div>';
 	}
-	$krasserString .= '</div>';
+	$workPlan .= '</div>';
 
-	return '<p>' . $krasserString . '</p>';
+	return '<p>' . $workPlan . '</p>';
 }

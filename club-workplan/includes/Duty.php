@@ -1,6 +1,6 @@
 <?php
 
-namespace includes;
+namespace cwp\includes;
 
 class Duty {
 

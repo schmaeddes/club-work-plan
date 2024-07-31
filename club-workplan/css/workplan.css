@@ -1,0 +1,45 @@
+.flex {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.duty-box {
+	width: 250px;
+	min-width: 250px;
+	height: 65px;
+	padding: 6px;
+	font-size: 14px;
+	box-sizing: border-box;
+	background-color: lightblue;
+}
+
+.dutyTimedBlock {
+	gap: 10px;
+}
+
+.booked {
+	background-color: lightgreen;
+}
+
+.dutyTitle {
+	width: 100%;
+	font-size: 12pt;
+	border-bottom: 1px solid #dbdbdb;
+}
+
+.memberName {
+ 	font-weight: bold;
+	text-shadow: 0.5px 0.5px #ffffff;
+}
+
+.dutyType {
+	width: 50%;
+	text-align: left;
+	font-weight: bold;
+}
+
+.dutyTime {
+	width: 50%;
+	text-align: right;
+}

@@ -1,9 +1,9 @@
 <?php
 
-require_once(CWP_PLUGIN_PATH . 'admin/events_menu.php');
-require_once(CWP_PLUGIN_PATH . 'admin/duties_menu.php');
-require_once(CWP_PLUGIN_PATH . 'admin/edit_event.php');
-require_once(CWP_PLUGIN_PATH . 'admin/edit_duty.php');
+require_once CWP_PLUGIN_PATH . 'admin/events_menu.php';
+require_once CWP_PLUGIN_PATH . 'admin/duties_menu.php';
+require_once CWP_PLUGIN_PATH . 'admin/edit_event.php';
+require_once CWP_PLUGIN_PATH . 'admin/edit_duty.php';
 
 add_action('admin_menu', 'add_workplan_setup_menu');
 function add_workplan_setup_menu() {
