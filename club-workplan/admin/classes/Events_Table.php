@@ -5,7 +5,7 @@ if (!class_exists('WP_List_Table')) {
 }
 
 add_action( 'admin_notices_delete-event', 'event_delete_notice__info', 1, 2);
-function event_delete_notice__info($eventData, $numberOfDeletedRows) {
+function event_delete_notice__info($eventData, $numberOfDeletedRows): void {
 	$class = 'notice notice-info';
 	$message = __( $eventData->name . ' was deleted and with it ' . $numberOfDeletedRows . ' duties.', 'sample-text-domain' );
 

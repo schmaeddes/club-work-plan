@@ -2,8 +2,39 @@
 
 require_once(CWP_PLUGIN_PATH . 'admin/classes/Events_Table.php');
 
+add_action( 'admin_notices_empty-fields', 'event_empty_fields__info', 1, 2);
+function event_empty_fields__info(): void {
+	$class = 'notice notice-info';
+	$message = __( 'Please fill all fields for the event', 'sample-text-domain' );
+
+	printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
+}
+
+add_action('admin_post_create-event', 'submit_create_event');
+function submit_create_event() {
+	global $wpdb;
+
+	$newEventName = $_POST['new_event_name'];
+	$newEventDescription = $_POST['new_event_description'];
+	$newEventDate = $_POST['new_event_date'];
+
+	if ($newEventName == "" || $newEventDescription == "" || $newEventDate == "") {
+		$redirectUrl = sprintf("/wp-admin/admin.php?page=%s&message=%s", "club-workplan", "empty-fields");
+		return wp_redirect(esc_url_raw(site_url($redirectUrl)));
+	}
+
+	$data = array('event_name' => $newEventName, 'event_description' => $newEventDescription, 'date_of_event' => $newEventDate);
+	$wpdb->insert(CWP_EVENT_TABLE, $data);
+
+	wp_safe_redirect(esc_url(site_url('/wp-admin/admin.php?page=club-workplan')));
+}
+
 function cwp_create_event() {
     get_event_table_stlye();
+
+	if ($_GET['message'] == "empty-fields") {
+		do_action('admin_notices_empty-fields');
+	}
 
     echo '<div class="wrap">';
     echo '<h1>Events</h1>';
