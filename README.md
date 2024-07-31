@@ -1,5 +1,4 @@
-[![Uses SemVer 2.0.0](https://img.shields.io/badge/Uses%20SemVer-2.0.0-green)](https://semver.org/spec/v2.0.0.html)
-[![Keep a Changelog v1.1.0 badge](https://img.shields.io/badge/changelog-Keep%20a%20Changelog%20v1.1.0-%23E05735)](docs/CHANGELOG.md)
+
 
 <h1 align="center">club-work-plan</h1>
 <p align="center" style="font-style: italic">name to be discussed</p> 
@@ -10,11 +9,12 @@
     <br />
     <a href="http://www.schmaeddes.de"><strong>My Homepage</strong></a>
     <br />
-    <br />
 
   </p>
-
 <div align="center">
+
+[![Uses SemVer 2.0.0](https://img.shields.io/badge/Uses%20SemVer-2.0.0-green)](https://semver.org/spec/v2.0.0.html)
+[![Keep a Changelog v1.1.0 badge](https://img.shields.io/badge/changelog-Keep%20a%20Changelog%20v1.1.0-%23E05735)](docs/CHANGELOG.md)
 
 ![img.png](img.png)
 </div>
